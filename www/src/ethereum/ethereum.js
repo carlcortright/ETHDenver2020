@@ -29,6 +29,6 @@ export const formatTokenValueContract = async (value, decimals) => {
     const bn = new BigNumber(value);
     
     return bn.shiftedBy(decimals).toString(10);
-}
+};
 
-export web3;
+export const web3;

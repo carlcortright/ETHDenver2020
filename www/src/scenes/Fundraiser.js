@@ -11,6 +11,7 @@ class Fundraiser extends Component {
         const { contractAddress } = props.match.params;
         this.state = {
             contractAddress: contractAddress,
+            usdcAddress: '0x123456',
             step: 1,
         }
     }
@@ -22,7 +23,10 @@ class Fundraiser extends Component {
         let stateComponent;
         switch (this.state.step) {
             case 1:
-                stateComponent = <ContributionStep />
+                stateComponent = <ContributionStep 
+                    sponsorTokenContract={this.contractAddress}
+                    usdcTokenContract={this.usdcAddress}    
+                />
         }
 
         return (

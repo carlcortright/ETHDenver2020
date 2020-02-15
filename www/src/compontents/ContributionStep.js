@@ -8,17 +8,26 @@ import Countdown from "react-countdown-now";
 import {
     Label,
     Input,
-    Select,
-    Textarea,
-    Radio,
-    Checkbox,
   } from '@rebass/forms'
+
+import { 
+    getName,
+    getSymbol,
+    getTargetFundraiseAmount,
+    getInterestRate,
+    setSponsorTokenContract,
+    setUSDCTokenContract,
+ } from '../ethereum/token_methods';
 
 class ContributionStep extends Component {
 	constructor(props) {
 		super(props);
-        const { address } = this.props;
-	}
+        const { sponsorTokenAddress, usdcTokenAddress } = this.props;
+        this.sponsorTokenContract = sponsorTokenAddress;
+        this.usdcTokenContract = usdcTokenAddress;
+        setSponsorTokenContract(sponsorTokenAddress);
+        setUSDCTokenContract(usdcTokenAddress);
+    }
 
 	render() {
 		return (
@@ -42,11 +51,10 @@ class ContributionStep extends Component {
 
                     <Flex py={4}>
                         <Flex width={1/2} flexDirection='column'>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Name: {}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Symbol: {}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: {}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Description: {}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Name: {getName()}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Symbol: {getSymbol()}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: {getTargetFundraiseAmount()}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {getInterestRate()}</Text>
                         </Flex>
                         <Flex width={1/2}>
                             <Flex
