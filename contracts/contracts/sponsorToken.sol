@@ -45,7 +45,9 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     	uint256 _fundraiseAmount,
     	uint8 _interestRate,
     	uint256 _fundraiseLength,
-    	string memory _description
+    	string memory _description,
+    	address _addressUSDC,
+    	address _recipient
     ) 
     	ERC20Detailed(
     		_name,
@@ -58,7 +60,7 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
       description = _description;
       fundraiseAmount = _fundraiseAmount;
       interestRate = _interestRate;
-      contractUSDC = ERC20Token(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
+      contractUSDC = ERC20Token(_addressUSDC);
 
       // Start time of fundraiser is unix time of block
       // End time is start + length of fundraise
@@ -67,7 +69,7 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
       fundraiseEndTime = fundraiseStartTime + fundraiseLength;
 
       // Address that creates contract is recipient
-      recipient = msg.sender;
+      recipient = _recipient;
 
       // Init state
       currentState = States.Fundraising;
