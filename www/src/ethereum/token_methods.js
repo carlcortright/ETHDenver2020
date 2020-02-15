@@ -25,6 +25,10 @@ export const getName = async () => {
     return SponsorTokenContract.methods.name().call();
 }
 
+export const getSymbol = async () => {
+    return SponsorTokenContract.methods.symbol().call();
+}
+
 // Fundraising methods:
 export const getTargetFundraiseAmount = async () => {
     return SponsorTokenContract.methods.getFundraiseAmount().call();
