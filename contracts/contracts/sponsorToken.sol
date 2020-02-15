@@ -105,6 +105,10 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     function loanRepaid() private returns (bool) {
         return (contractUSDC.balanceOf(address(this)) >= calcLoanRepayment());
     }
+
+    function allSponsorTokensReturned() private returns (bool) {
+    	return (balanceOf(address(this)) == totalSupply());
+    }
     
     // Public function for anyone to update state based on contract funds
     // Returns true of state changed, false if state remains the same
@@ -133,6 +137,11 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     		}
     	} else if (currentState == States.ConvertLoan) {
     		// Check if all the sponsor tokens have been returned to contract
+    		if (allSponsorTokensReturned()) {
+    			currentState = States.ClosedLoan;
+
+    			return true;
+    		}
     	} else { 
     		// state is closed, nothing actionable
     		return false;
@@ -193,6 +202,7 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     
     // In case of failed fundraise return funds to lenders
     function returnContributions() private {
+    	require (currentState == States.Fundraising);
         uint i;
     	for(i = 0; i < lenders.length; i++){
     		contractUSDC.transfer(lenders[i], contributedUSDC[lenders[i]]);
