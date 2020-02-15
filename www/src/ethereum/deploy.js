@@ -8,7 +8,6 @@ export const deployContract = async (
     fundraiseAmount,
     interestRate,
     endTime,
-    description,
     addressUSDC,
     recipient
 ) => {
@@ -28,19 +27,12 @@ export const deployContract = async (
         fundraiseAmount,
         interestRate,
         endTime,
-        description,
         addressUSDC,
         recipient
     ]
 
     const sponsor = await SponsorContract.deploy({ data, arguments: argumentArray}).send({ from });
-
-    console.log(sponsor.options.address);
-
     const sponsorTokenAddress = sponsor.options.address;
 
     return sponsorTokenAddress;
-    // const SponsorContractDeployed = new web3.eth.Contract(abi, sponsorTokenAddress);
-    // const description = await SponsorContractDeployed.methods.getDescription().call();
-    // console.log('description', description);
 }
