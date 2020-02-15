@@ -38,6 +38,11 @@ export default {
     },
     text: {
     },
+    link: {
+        '&:hover': {
+            color: 'primary',
+        }
+    },
     buttons: {
       primary: {
         color: 'white',

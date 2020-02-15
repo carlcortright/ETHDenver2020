@@ -19,7 +19,7 @@ class Nav extends Component {
 				/>
 				<Bar />
 				<Text p={4} pl={0} fontSize={[ 4 ]}>
-				Personal Lending
+				Peer Lending
 				</Text>
 				<Box mx='auto' />
 				<WalletConnect />

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'rebass';
+import { Button, Link } from 'rebass';
 
 class WalletConnect extends Component {
 	constructor() {
@@ -29,7 +29,9 @@ class WalletConnect extends Component {
 				?
 				<Button variant='primary' fontWeight={500} mr={4} onClick={this.connnectWallet}>Connect Wallet</Button>
 				:
-				<div>{userAddress}</div>
+                <Link mr={4} href={"https://etherscan.io/address/" + userAddress}>
+                    <Button variant='primary' fontWeight={500} mr={4}>{userAddress.substr(0, 6)}...{userAddress.substr(37, 42)} Connected</Button>
+                </Link>
 				}
 			</div>
 		);
