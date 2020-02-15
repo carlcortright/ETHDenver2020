@@ -30,3 +30,5 @@ export const formatTokenValueContract = async (value, decimals) => {
     
     return bn.shiftedBy(decimals).toString(10);
 }
+
+export web3;
