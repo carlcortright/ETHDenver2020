@@ -18,7 +18,6 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
 
     uint256 private fundraiseStartTime;
     uint256 private fundraiseEndTime;
-    uint256 private fundraiseLength;
 
     uint256 private openLoanStartTime;
 
@@ -44,7 +43,7 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     	uint8 _decimals,
     	uint256 _fundraiseAmount,
     	uint8 _interestRate,
-    	uint256 _fundraiseLength,
+    	uint256 _fundraiseEndTime,
     	string memory _description,
     	address _addressUSDC,
     	address _recipient
@@ -63,26 +62,19 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
       contractUSDC = ERC20Token(_addressUSDC);
 
       // Start time of fundraiser is unix time of block
-      // End time is start + length of fundraise
       fundraiseStartTime = now;
-      fundraiseLength = _fundraiseLength;
-      fundraiseEndTime = fundraiseStartTime + fundraiseLength;
+      fundraiseEndTime = _fundraiseEndTime;
 
       // Address that creates contract is recipient
       recipient = _recipient;
 
       // Init state
       currentState = States.Fundraising;
-      startLoanBalanceUSDC = 0;
    	}
     
     // Getter methods
     function getFundraiseAmount() public view returns (uint256) {
     	return fundraiseAmount;
-    }
-
-	function getFundraiseLength() public view returns (uint256) {
-    	return fundraiseLength;
     }
 
 	function getInterestRate() public view returns (uint256) {
