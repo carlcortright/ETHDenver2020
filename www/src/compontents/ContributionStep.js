@@ -24,20 +24,42 @@ import {
 class ContributionStep extends Component {
 	constructor(props) {
 		super(props);
-        const { sponsorTokenAddress, usdcTokenAddress } = this.props;
         this.state = {
-            sponsorTokenContract: {},
-            usdcTokenContract: {}, 
             name: 'Loading...',
-
+            symbol: 'Loading...',
+            targetAmount: 'Loading...',
+            interestRate: 'Loading...'
         }
-        this.sponsorTokenContract = sponsorTokenAddress;
-        this.usdcTokenContract = usdcTokenAddress;
-        setSponsorTokenContract(sponsorTokenAddress);
-        setUSDCTokenContract(usdcTokenAddress);
+    }
+
+    componentDidMount() {
+        this.intializeContractData();
+    }
+
+    intializeContractData = async () => {
+        const { sponsorTokenAddress, usdcTokenAddress } = this.props;
+        console.log(sponsorTokenAddress)
+        console.log(window.ethereum)
+        if(window.ethereum) {
+            const web3 = await getWeb3();
+            await setSponsorTokenContract(sponsorTokenAddress, web3);
+            await setUSDCTokenContract(usdcTokenAddress, web3);
+            const name = await getName();
+            const symbol = await getSymbol();
+            const targetAmount = await getTargetFundraiseAmount();
+            const interestRate = await getInterestRate();
+            this.setState({ name, symbol, targetAmount, interestRate });
+        }
+        // TODO: alert to download metamask
     }
 
 	render() {
+        const {
+            name,
+            symbol,
+            targetAmount,
+            interestRate
+        } = this.state; 
 		return (
 			<Flex
                   m={2, 3, 4, 5}
@@ -59,10 +81,10 @@ class ContributionStep extends Component {
 
                     <Flex py={4}>
                         <Flex width={1/2} flexDirection='column'>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Name: {getName}</Text> */}
-                            <Text fontSize={[ 2, 3 ]} my={2}>Symbol: {getSymbol}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: {getTargetFundraiseAmount}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {getInterestRate}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Name: {name}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Symbol: {symbol}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: {targetAmount}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {interestRate}</Text>
                         </Flex>
                         <Flex width={1/2}>
                             <Flex

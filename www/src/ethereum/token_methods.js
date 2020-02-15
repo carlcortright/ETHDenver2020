@@ -12,12 +12,12 @@ let USDCTokenContract;
 export const setSponsorTokenContract = async (address, web3) => {
     const abi = SponsorToken.abi
     console.log(web3)
-    SponsorTokenContract = await web3.eth.Contract(abi, address);
+    SponsorTokenContract = new web3.eth.Contract(abi, address);
 }
 
 export const setUSDCTokenContract = async (address, web3) => {
     const abi = ERC20.abi
-    USDCTokenContract = web3.eth.Contract(abi, address);
+    USDCTokenContract = new web3.eth.Contract(abi, address);
 }
 
 // TODO: Get loan state
