@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { FormLayout } from '../compontents'
 import { Flex, Heading, Box, Button } from 'rebass';
 
+// Ethereum
+import { deployContract } from '../ethereum/deploy';
+
 import Emoji from 'a11y-react-emoji'
 
 import {
@@ -107,7 +110,7 @@ class CreateFundraiser extends Component {
                       </Box>
 
                       <Box p={10} ml={'auto'} mr={'auto'}>
-                        <Button fontSize={3}>
+                        <Button fontSize={3} onClick={deployContract}>
                           Deploy <Emoji symbol="🚀" label="rocket" />
                         </Button>
                       </Box>
