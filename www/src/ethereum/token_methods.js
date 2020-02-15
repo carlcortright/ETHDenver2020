@@ -1,21 +1,20 @@
-import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
+
+import { web3 } from './ethereum.js'
 
 import SponsorToken from '../abis/SponsorToken.json';
 import ERC20 from '../abis/ERC20.json';
-
-let web3;
 
 let SponsorTokenContract;
 let USDCTokenContract;
 
 // Initialize Contracts
-export const getSponsorTokenContract = async (address) => {
+export const setSponsorTokenContract = async (address) => {
     const abi = SponsorToken.abi
     SponsorTokenContract = web3.eth.Contract(abi, address);
 }
 
-export const getUSDCTokenContract = async (address) => {
+export const setUSDCTokenContract = async (address) => {
     const abi = ERC20.abi
     USDCTokenContract = web3.eth.Contract(abi, address);
 }
@@ -79,18 +78,22 @@ export const getTotalSponsorTokensExchanged = async () => {
 
 // Could've merged this with the method below, don't hate me, clarity is nice
 export const approveOnUSDC = async (amt) => {
-    return USDCTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send();
+    const from = { from: web3.eth.accounts[0] }
+    return USDCTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from });
 }
 
 // Approve on SponsorToken (for repaying loan)
 export const approveOnSponsorToken = async () => {
-    return SponsorTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send();
+    const from = { from: web3.eth.accounts[0] }
+    return SponsorTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from });
 }
 
 export const contribute = async () => {
-    return SponsorTokenContract.methods.contribute(amt).send();
+    const from = { from: web3.eth.accounts[0] }
+    return SponsorTokenContract.methods.contribute(amt).send({ from });
 }
 
 export const payLoan = async () => {
-    return SponsorTokenContract.methods.payLoan(amt).send();
+    const from = { from: web3.eth.accounts[0] }
+    return SponsorTokenContract.methods.payLoan(amt).send({ from });
 }
