@@ -11,11 +11,7 @@ import Emoji from 'a11y-react-emoji'
 
 import {
   Label,
-  Input,
-  Select,
-  Textarea,
-  Radio,
-  Checkbox,
+  Input
 } from '@rebass/forms'
 
 class CreateFundraiser extends Component {
@@ -29,7 +25,6 @@ class CreateFundraiser extends Component {
       fundraiseAmount: '0',
       interestRate: '0',
       endTime: '0',
-      description: '',
       addressUSDC: '',
       recipient: ''
     }
@@ -72,7 +67,6 @@ class CreateFundraiser extends Component {
       fundraiseAmount,
       interestRate,
       endTime,
-      description,
       addressUSDC,
       recipient
     } = this.state;
@@ -85,7 +79,6 @@ class CreateFundraiser extends Component {
         fundraiseAmount,
         interestRate,
         endTime,
-        description,
         addressUSDC,
         recipient
     );
@@ -99,17 +92,10 @@ class CreateFundraiser extends Component {
     }
   }
 
-    // this.props.history.push(`/fundraiser/${sponsorContractAddress}`);
-  
     render() {
       const {
         name,
         symbol,
-        decimals,
-        fundraiseAmount,
-        interestRate,
-        endTime,
-        description,
         addressUSDC,
         recipient
       } = this.state;
@@ -211,17 +197,6 @@ class CreateFundraiser extends Component {
                           placeholder='0x0000....'
                           onChange={this.handleInputChange}
                           value={addressUSDC}
-                        />
-                      </Box>
-
-                      <Box p={10}>
-                        <Label htmlFor='description'>Description</Label>
-                        <Input
-                          id='description'
-                          name='description'
-                          placeholder='Description'
-                          onChange={this.handleInputChange}
-                          value={description}
                         />
                       </Box>
 
