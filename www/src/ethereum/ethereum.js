@@ -7,11 +7,12 @@ export const getWeb3 = async () => {
     if(!web3) {
         web3 = new Web3(Web3.givenProvider);
     }
+    console.log('hit')
     return web3;
 }
 
 export const getAddress = async () => {
-    const web3 = getWeb3();
+    const web3 = await getWeb3();
     const accounts = await web3.eth.getAccounts();
     return accounts[0];
 }
