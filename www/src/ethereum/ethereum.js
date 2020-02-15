@@ -7,7 +7,6 @@ export const getWeb3 = async () => {
     if(!web3) {
         web3 = new Web3(Web3.givenProvider);
     }
-    console.log('hit')
     return web3;
 }
 
@@ -20,9 +19,14 @@ export const getAddress = async () => {
 
 BigNumber.config({ DECIMAL_PLACES: 2 });
 
-export const formatTokenValue = async (value, tokenContract) => {
-    const decimals = await tokenContract.methods.decimals().call()
+export const formatTokenValueHuman = async (value, decimals) => {
     const bn = new BigNumber(value);
     
     return bn.shiftedBy(-decimals).toString(10);
 };
+
+export const formatTokenValueContract = async (value, decimals) => {
+    const bn = new BigNumber(value);
+    
+    return bn.shiftedBy(decimals).toString(10);
+}

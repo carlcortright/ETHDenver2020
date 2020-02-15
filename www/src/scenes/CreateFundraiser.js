@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { FormLayout } from '../compontents'
 import { Flex, Heading, Box, Button } from 'rebass';
+import { withRouter } from 'react-router-dom';
 
 // Ethereum
 import { deployContract } from '../ethereum/deploy';
+import { formatTokenValueContract } from '../ethereum/ethereum';
 
 import Emoji from 'a11y-react-emoji'
 
@@ -17,8 +19,100 @@ import {
 } from '@rebass/forms'
 
 class CreateFundraiser extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      name: '',
+      symbol: '',
+      decimals: '6',
+      fundraiseAmount: '0',
+      interestRate: '0',
+      endTime: '0',
+      description: '',
+      addressUSDC: '',
+      recipient: ''
+    }
+  }
+
+  handleInputChange = event => {
+    this.setState({
+        [event.target.name]: event.target.value
+    });
+  }
+
+  handleTokenInputAmount = async (event) => {
+    const value = event.target.value;
+    const fundraiseAmount = await formatTokenValueContract(value, 6);
+    this.setState({
+      fundraiseAmount: +fundraiseAmount
+    });
+  }
+
+  handleInterestRate = event => {
+    const interestRate = (event.target.value * 100);
+    this.setState({
+      interestRate
+    });
+  }
+
+  handleDate = event => {
+    const days = event.target.value;
+    const endTime = Date.now() + (days * 86400);
+    this.setState({
+      endTime
+    })
+  }
+
+  createContract = async() => {
+    const {
+      name,
+      symbol,
+      decimals,
+      fundraiseAmount,
+      interestRate,
+      endTime,
+      description,
+      addressUSDC,
+      recipient
+    } = this.state;
+
+    try{
+      const sponsorContractAddress = await deployContract(
+        name,
+        symbol,
+        decimals,
+        fundraiseAmount,
+        interestRate,
+        endTime,
+        description,
+        addressUSDC,
+        recipient
+    );
+
+    this.props.history.push(`/fundraiser/${sponsorContractAddress}`);
+    }
+    
+    catch (error){
+      window.alert('Error with deploying contract');
+      console.log(error);
+    }
+  }
+
+    // this.props.history.push(`/fundraiser/${sponsorContractAddress}`);
   
     render() {
+      const {
+        name,
+        symbol,
+        decimals,
+        fundraiseAmount,
+        interestRate,
+        endTime,
+        description,
+        addressUSDC,
+        recipient
+      } = this.state;
       return (
             <FormLayout>
                 <Flex
@@ -43,6 +137,8 @@ class CreateFundraiser extends Component {
                           id='name'
                           name='name'
                           placeholder='Token Name'
+                          onChange={this.handleInputChange}
+                          value={name}
                         />
                       </Box>
                       <Box p={10}>
@@ -51,52 +147,70 @@ class CreateFundraiser extends Component {
                           id='symbol'
                           name='symbol'
                           placeholder='Token Symbol'
+                          onChange={this.handleInputChange}
+                          value={symbol}
                         />
                       </Box>
 
                       <Box p={10}>
-                        <Label htmlFor='amount'>Fundraise Amount ($)</Label>
+                        <Label htmlFor='fundraiseAmount'>Fundraise Amount ($)</Label>
                         <Input
-                          id='amount'
-                          name='amount'
+                          id='fundraiseAmount'
+                          name='fundraiseAmount'
                           placeholder='0'
                           type="number" 
                           min="0.01" 
                           step="0.01" 
+                          onChange={this.handleTokenInputAmount}
                         />
                       </Box>
 
                       <Box p={10}>
-                        <Label htmlFor='rate'>Interest Rate (% Annual)</Label>
+                        <Label htmlFor='interestRate'>Interest Rate (% Annual)</Label>
                         <Input
-                          id='rate'
-                          name='rate'
+                          id='interestRate'
+                          name='interestRate'
                           placeholder='0'
                           type="number" 
                           min="0"
                           max="100" 
-                          step="0.01" 
+                          step="0.01"
+                          onChange={this.handleInterestRate}
                         />
                       </Box>
 
                       <Box p={10}>
-                        <Label htmlFor='length'>Fundraise Length (Days)</Label>
+                        <Label htmlFor='endTime'>Fundraise Length (Days)</Label>
                         <Input
-                          id='length'
-                          name='length'
+                          id='endTime'
+                          name='endTime'
                           placeholder='0'
                           type="number" 
                           min="1" 
-                          step="0.01" 
+                          step="0.01"
+                          onChange={this.handleDate}
                         />
                       </Box>
 
                       <Box p={10}>
-                        <Label htmlFor='address'>Recipient Address</Label>
+                        <Label htmlFor='recipient'>Recipient Address</Label>
                         <Input
-                          id='address'
-                          name='address'
+                          id='recipient'
+                          name='recipient'
                           placeholder='0x0000....'
+                          onChange={this.handleInputChange}
+                          value={recipient}
+                        />
+                      </Box>
+
+                      <Box p={10}>
+                        <Label htmlFor='addressUSDC'>USDC Token Address</Label>
+                        <Input
+                          id='addressUSDC'
+                          name='addressUSDC'
+                          placeholder='0x0000....'
+                          onChange={this.handleInputChange}
+                          value={addressUSDC}
                         />
                       </Box>
 
@@ -106,11 +220,13 @@ class CreateFundraiser extends Component {
                           id='description'
                           name='description'
                           placeholder='Description'
+                          onChange={this.handleInputChange}
+                          value={description}
                         />
                       </Box>
 
                       <Box p={10} ml={'auto'} mr={'auto'}>
-                        <Button fontSize={3} onClick={deployContract}>
+                        <Button fontSize={3} onClick={this.createContract}>
                           Deploy <Emoji symbol="🚀" label="rocket" />
                         </Button>
                       </Box>
@@ -124,4 +240,4 @@ class CreateFundraiser extends Component {
 }
 
 
-export default CreateFundraiser;
+export default withRouter(CreateFundraiser);
