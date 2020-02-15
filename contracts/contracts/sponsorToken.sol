@@ -14,14 +14,13 @@ contract ERC20Token {
 contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
 	// Metadata about fundraise
     uint256 private fundraiseAmount;
-   	uint8 private interestRate;
+   	uint256 private interestRate;
 
     uint256 private fundraiseStartTime;
     uint256 private fundraiseEndTime;
 
     uint256 private openLoanStartTime;
 
-   	string private description;
    	address private recipient;
 
     ERC20Token contractUSDC;
@@ -46,12 +45,11 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     	string memory _symbol,
     	uint8 _decimals,
     	uint256 _fundraiseAmount,
-    	uint8 _interestRate,
+    	uint256 _interestRate,
     	uint256 _fundraiseEndTime,
-    	string memory _description,
     	address _addressUSDC,
     	address _recipient
-    ) 
+    )
     	ERC20Detailed(
     		_name,
     		_symbol,
@@ -60,7 +58,6 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     	public 
     { 
       // Set metadata
-      description = _description;
       fundraiseAmount = _fundraiseAmount;
       interestRate = _interestRate;
       contractUSDC = ERC20Token(_addressUSDC);
@@ -74,7 +71,10 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
       currentState = States.Fundraising;
    	}
     
-    // Getter methods
+    ///*******************///
+    ///  Getter methods   ///
+    ///*******************///
+
     function getFundraiseAmount() public view returns (uint256) {
     	return fundraiseAmount;
     }
@@ -83,11 +83,25 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     	return interestRate;
     }
 
-    function getDescription() public view returns (string memory) {
-        return description;
+    function getContractBalanceUSDC() public view returns (uint256) {
+    	return contractBalanceUSDC;
+    }
+
+    function getEndTimeFundraiser() public view returns (uint256) {
+    	return fundraiseEndTime;
+    }
+
+    function getStartTimeFundraiser() public view returns (uint256) {
+    	return fundraiseStartTime;
+    }
+
+    function getTotalLoanPayment() public view returns (uint256) {
+    	return totalLoanPayment;
     }
     
-    // Checks for state transitions
+    ///************************///
+    ///    State Transitions   ///
+    ///************************///
     function enoughFundsRaised() private view returns (bool) {
         return (contractBalanceUSDC >= fundraiseAmount);
     }
@@ -147,6 +161,10 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
 
     	return false;
     }
+
+    ///*************************///
+    ///  Token Moving Methods   ///
+    ///*************************///
 
     // Function for a lender to contribute USDC to fundraiser
     function contribute(uint256 amount) public returns (bool) {
@@ -217,7 +235,7 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
         contractBalanceUSDC -= toSendUSDC;
     }
 
-    function sponsorTokenToUSDC() private view returns (uint256) {
+    function sponsorTokenToUSDC() public view returns (uint256) {
     	return totalLoanPayment / totalSupply();
     }
 
