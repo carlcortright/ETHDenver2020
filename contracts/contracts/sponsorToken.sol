@@ -20,6 +20,8 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     uint256 private fundraiseEndTime;
     uint256 private fundraiseLength;
 
+    uint256 private openLoanStartTime;
+
    	string private description;
    	address private recipient;
 
@@ -115,7 +117,7 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
           	    return true;
             }
             if (isFundraiseOver()) {
-          	    // Return contributions
+          	    returnContributions();
                 currentState = States.ClosedLoan;
 
                 return true;
@@ -139,27 +141,34 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
 
     // Function for a lender to contribute USDC to fundraiser
     function contribute(uint256 amount) public returns (bool) {
-      require (currentState == States.Fundraising);
-      require (amount + contractUSDC.balanceOf(address(this)) <= fundraiseAmount);
+        require (currentState == States.Fundraising);
+        require (amount + contractUSDC.balanceOf(address(this)) <= fundraiseAmount);
 
-      // TransferFrom USDC amount into contract address
-      contractUSDC.transferFrom(msg.sender, address(this), amount);
+        // TransferFrom USDC amount into contract address
+        contractUSDC.transferFrom(msg.sender, address(this), amount);
 
-      lenders.push(msg.sender);
-      // Default value for mapping value uint is 0, so no need to check if value exists or not
-      contributedUSDC[msg.sender] += amount;
+        lenders.push(msg.sender);
+        // Default value for mapping value uint is 0, so no need to check if value exists or not
+        contributedUSDC[msg.sender] += amount;
 
-      return true;
+        return true;
     }
 
     function kickOffLoan() private {
+    	require (currentState == States.Fundraising);
         require (checkUSDCAccounting());
+
         // Mint tokens to each lender equivalent to amount of USDC they put in
       	uint i;
     	for(i = 0; i < lenders.length; i++){
     		mint(lenders[i], contributedUSDC[lenders[i]]);
     	}
     	// TODO: Turn off minting here
+
+    	// Send USDC Loan to recipient
+    	contractUSDC.transfer(recipient, contractUSDC.balanceOf(address(this)));
+
+    	openLoanStartTime = now;
     }
 
     function checkUSDCAccounting() private returns (bool) {
@@ -181,8 +190,11 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     }
     
     // In case of failed fundraise return funds to lenders
-    function returnContributions() private returns (bool) {
-
+    function returnContributions() private {
+        uint i;
+    	for(i = 0; i < lenders.length; i++){
+    		contractUSDC.transfer(lenders[i], contributedUSDC[lenders[i]]);
+    	}
     }
 
 }
