@@ -98,6 +98,10 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     function getTotalLoanPayment() public view returns (uint256) {
     	return totalLoanPayment;
     }
+
+    function getCurrentContribution(address lender) public view returns (uint256) {
+    	return contributedUSDC[lender];
+    }
     
     ///************************///
     ///    State Transitions   ///

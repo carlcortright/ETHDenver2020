@@ -43,7 +43,9 @@ export const getStartTimeFundraiser = async () => {
     return SponsorTokenContract.methods.getStartTimeFundraiser().call();
 }
 
-// TODO: Get your current contribution
+export const getCurrentContribution = async () => {
+    return SponsorTokenContract.methods.getCurrentContribution(web3.eth.accounts[0]).call();
+}
 
 export const getInterestRate = async () => {
     return SponsorTokenContract.methods.getInterestRate().call();
@@ -63,10 +65,32 @@ export const getSponsorTokenValue = async () => {
 // Loan exchange methods:
 // Get current SponsorToken to USDC value => getSponsorTokenValue()
 
-
 export const getTotalLoanPayment = async () => {
     return SponsorTokenContract.methods.getTotalLoanPayment().call();
 }
 
-// TODO: Get current sponsortoken balance of end user
-// TODO: Get amount exchanged
+export const getSponsorTokenHeld = async () => {
+    return SponsorTokenContract.methods.balanceOf(web3.eth.accounts[0]).call();
+}
+
+export const getTotalSponsorTokensExchanged = async () => {
+    return SponsorTokenContract.methods.balanceOf(SponsorTokenContract.options.address).call();
+}
+
+// Could've merged this with the method below, don't hate me, clarity is nice
+export const approveOnUSDC = async (amt) => {
+    return USDCTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send();
+}
+
+// Approve on SponsorToken (for repaying loan)
+export const approveOnSponsorToken = async () => {
+    return SponsorTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send();
+}
+
+export const contribute = async () => {
+    return SponsorTokenContract.methods.contribute(amt).send();
+}
+
+export const payLoan = async () => {
+    return SponsorTokenContract.methods.payLoan(amt).send();
+}
