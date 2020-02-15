@@ -3,6 +3,8 @@ import { Flex, Heading, Image, Box, Text, Button } from 'rebass';
 import styled from 'styled-components';
 import USDC from '../img/usdc.svg';
 
+import { getWeb3 } from '../ethereum/ethereum';
+
 import Countdown from "react-countdown-now";
 
 import {
@@ -23,6 +25,12 @@ class ContributionStep extends Component {
 	constructor(props) {
 		super(props);
         const { sponsorTokenAddress, usdcTokenAddress } = this.props;
+        this.state = {
+            sponsorTokenContract: {},
+            usdcTokenContract: {}, 
+            name: 'Loading...',
+
+        }
         this.sponsorTokenContract = sponsorTokenAddress;
         this.usdcTokenContract = usdcTokenAddress;
         setSponsorTokenContract(sponsorTokenAddress);
@@ -51,10 +59,10 @@ class ContributionStep extends Component {
 
                     <Flex py={4}>
                         <Flex width={1/2} flexDirection='column'>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Name: {getName()}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Symbol: {getSymbol()}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: {getTargetFundraiseAmount()}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {getInterestRate()}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Name: {getName}</Text> */}
+                            <Text fontSize={[ 2, 3 ]} my={2}>Symbol: {getSymbol}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: {getTargetFundraiseAmount}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {getInterestRate}</Text>
                         </Flex>
                         <Flex width={1/2}>
                             <Flex

@@ -9,12 +9,13 @@ let SponsorTokenContract;
 let USDCTokenContract;
 
 // Initialize Contracts
-export const setSponsorTokenContract = async (address) => {
+export const setSponsorTokenContract = async (address, web3) => {
     const abi = SponsorToken.abi
-    SponsorTokenContract = web3.eth.Contract(abi, address);
+    console.log(web3)
+    SponsorTokenContract = await web3.eth.Contract(abi, address);
 }
 
-export const setUSDCTokenContract = async (address) => {
+export const setUSDCTokenContract = async (address, web3) => {
     const abi = ERC20.abi
     USDCTokenContract = web3.eth.Contract(abi, address);
 }
@@ -87,17 +88,17 @@ export const approveOnUSDC = async (amt) => {
 }
 
 // Approve on SponsorToken (for repaying loan)
-export const approveOnSponsorToken = async () => {
+export const approveOnSponsorToken = async (amt) => {
     const from = { from: web3.eth.accounts[0] }
     return SponsorTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from });
 }
 
-export const contribute = async () => {
+export const contribute = async (amt) => {
     const from = { from: web3.eth.accounts[0] }
     return SponsorTokenContract.methods.contribute(amt).send({ from });
 }
 
-export const payLoan = async () => {
+export const payLoan = async (amt) => {
     const from = { from: web3.eth.accounts[0] }
     return SponsorTokenContract.methods.payLoan(amt).send({ from });
 }

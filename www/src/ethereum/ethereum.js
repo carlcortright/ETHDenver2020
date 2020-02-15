@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
 
-let web3;
+export let web3;
 
 export const getWeb3 = async () => {
     if(!web3) {
@@ -30,5 +30,3 @@ export const formatTokenValueContract = async (value, decimals) => {
     
     return bn.shiftedBy(decimals).toString(10);
 };
-
-export const web3;
