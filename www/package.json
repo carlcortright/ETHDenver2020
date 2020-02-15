@@ -4,16 +4,20 @@
   "private": true,
   "dependencies": {
     "@emotion/core": "^10.0.27",
+    "@rebass/forms": "^4.0.6",
     "@rebass/preset": "^4.0.5",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "a11y-react-emoji": "^1.1.2",
     "emotion-theming": "^10.0.27",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
-    "rebass": "^4.0.7"
+    "rebass": "^4.0.7",
+    "styled-components": "^5.0.1",
+    "theme-ui": "^0.3.1"
   },
   "scripts": {
     "start": "react-scripts start",
