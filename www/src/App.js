@@ -1,25 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Heading } from 'rebass';
+import { ThemeProvider } from 'emotion-theming'
+import preset from '@rebass/preset'
 import './App.css';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  // Link
+} from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+    <ThemeProvider theme={preset}>
+      <Heading>Hello world</Heading>
+      <Router>
+          {/* A <Switch> looks through its children <Route>s and
+              renders the first one that matches the current URL. */}
+          <Switch>
+            <Route path="/recipient">
+              <Heading>Recipient Path</Heading>
+            </Route>
+            <Route path="/">
+              <Heading>Root path</Heading>
+            </Route>
+          </Switch>
+      </Router>
+    </ThemeProvider>
   );
 }
 
