@@ -191,9 +191,10 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     	return (totalInternalUSDC == contractUSDC.balanceOf(address(this)));
     }
 
-    // TODO
     function calcLoanInterest() private returns (uint256) {
-        return 0;
+        uint timeElapsedSeconds = now - openLoanStartTime;
+        // Number of years calculated as timeElapsed in seconds / 1 years worth of seconds (31622400)
+        return fundraiseAmount * (1 + (interestRate / 10000)) ** (timeElapsedSeconds / 31622400);
     }
 
     function calcLoanRepayment() private returns (uint256) {
