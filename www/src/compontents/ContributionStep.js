@@ -18,6 +18,7 @@ import {
     getTargetFundraiseAmount,
     getInterestRate,
     setSponsorTokenContract,
+    getCurrentContribution,
     setUSDCTokenContract,
  } from '../ethereum/token_methods';
 
@@ -28,7 +29,8 @@ class ContributionStep extends Component {
             name: 'Loading...',
             symbol: 'Loading...',
             targetAmount: 'Loading...',
-            interestRate: 'Loading...'
+            interestRate: 'Loading...',
+            contribution: 'Loading...',
         }
     }
 
@@ -48,7 +50,8 @@ class ContributionStep extends Component {
             const symbol = await getSymbol();
             const targetAmount = await getTargetFundraiseAmount();
             const interestRate = await getInterestRate();
-            this.setState({ name, symbol, targetAmount, interestRate });
+            const contribution = await getCurrentContribution();
+            this.setState({ name, symbol, targetAmount, interestRate, contribution });
         }
         // TODO: alert to download metamask
     }
@@ -58,7 +61,8 @@ class ContributionStep extends Component {
             name,
             symbol,
             targetAmount,
-            interestRate
+            interestRate,
+            contribution
         } = this.state; 
 		return (
 			<Flex
@@ -85,6 +89,7 @@ class ContributionStep extends Component {
                             <Text fontSize={[ 2, 3 ]} my={2}>Symbol: {symbol}</Text>
                             <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: {targetAmount}</Text>
                             <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {interestRate}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>My Contribution: {contribution}</Text>
                         </Flex>
                         <Flex width={1/2}>
                             <Flex
