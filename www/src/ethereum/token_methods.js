@@ -82,6 +82,7 @@ export const getTotalSponsorTokensExchanged = async () => {
 }
 
 // Could've merged this with the method below, don't hate me, clarity is nice
+// OLD
 export const approveOnUSDC = async (amt, addr) => {
     const from = {from : addr}
     return USDCTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from });
@@ -95,7 +96,9 @@ export const approveOnSponsorToken = async (amt, addr) => {
 
 export const contribute = async (amt, addr) => {
     const from = {from : addr}
-    return SponsorTokenContract.methods.contribute(amt).send({ from });
+    return SponsorTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from }).on('receipt', function(){
+        SponsorTokenContract.methods.contribute(amt).send({ from });
+    }); 
 }
 
 export const payLoan = async (amt, addr) => {
