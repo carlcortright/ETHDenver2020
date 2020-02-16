@@ -121,50 +121,6 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     function allSponsorTokensReturned() private view returns (bool) {
     	return (balanceOf(address(this)) == totalSupply());
     }
-    
-    // Public function for anyone to update state based on contract funds
-    // Returns true of state changed, false if state remains the same
-    // Should we return the state?
-    function changeState() public returns (bool) {
-    	if (currentState == States.Fundraising) {
-            if (enoughFundsRaised()) {
-            	// Set total amount of USDC funds raised
-            	startLoanBalanceUSDC = contractBalanceUSDC;
-            	kickOffLoan();
-
-          	    currentState = States.OpenLoan;
-          	    return true;
-            }
-            if (isFundraiseOver()) {
-            	// Fundraise failed, returned USDC to original lenders
-          	    returnContributions();
-
-                currentState = States.ClosedLoan;
-                return true;
-            }
-    	} else if (currentState == States.OpenLoan) {
-    		// Check if enough USDC has been deposited into contract to begin converts
-    		if (isLoanRepaid()) {
-    			// Set total amount of USDC paid back
-    			totalLoanPayment = contractBalanceUSDC;
-
-    			currentState = States.ConvertLoan;
-    			return true;
-    		}
-    	} else if (currentState == States.ConvertLoan) {
-    		// Check if all the sponsor tokens have been returned to contract
-    		if (allSponsorTokensReturned()) {
-    			currentState = States.ClosedLoan;
-
-    			return true;
-    		}
-    	} else { 
-    		// state is closed, nothing actionable
-    		return false;
-    	}
-
-    	return false;
-    }
 
     ///*************************///
     ///  Token Moving Methods   ///
@@ -175,6 +131,13 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
         require (currentState == States.Fundraising);
         require (amount + contractBalanceUSDC <= fundraiseAmount);
 
+        if (isFundraiseOver()) {
+        	// Fundraise failed, returned USDC to original lenders
+      	    returnContributions();
+
+            currentState = States.ClosedLoan;
+        }
+
         // TransferFrom USDC amount into contract address
         contractUSDC.transferFrom(msg.sender, address(this), amount);
 
@@ -183,6 +146,14 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
         contributedUSDC[msg.sender] += amount;
         contractBalanceUSDC += amount;
 
+        if (enoughFundsRaised()) {
+        	// Set total amount of USDC funds raised
+        	startLoanBalanceUSDC = contractBalanceUSDC;
+        	kickOffLoan();
+
+      	    currentState = States.OpenLoan;
+        }
+        
         return true;
     }
 
@@ -223,6 +194,13 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
 
 		contractUSDC.transferFrom(address(this), msg.sender, amount);
 		contractBalanceUSDC += 0;
+
+		if (isLoanRepaid()) {
+			// Set total amount of USDC paid back
+			totalLoanPayment = contractBalanceUSDC;
+
+			currentState = States.ConvertLoan;
+		}
     }
 
     function convertSponsorToken(uint256 amount) private {
@@ -237,6 +215,10 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
         contractUSDC.transfer(msg.sender, toSendUSDC);
 
         contractBalanceUSDC -= toSendUSDC;
+
+        if (allSponsorTokensReturned()) {
+			currentState = States.ClosedLoan;
+		}
     }
 
     function sponsorTokenToUSDC() public view returns (uint256) {
