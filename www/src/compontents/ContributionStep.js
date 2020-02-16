@@ -56,7 +56,8 @@ class ContributionStep extends Component {
 
             const unformattedInterestRate = await getInterestRate();
             const interestRate = (unformattedInterestRate/100);
-            this.setState({ name, symbol, targetAmount, interestRate });
+            const contribution = await getCurrentContribution();
+            this.setState({ name, symbol, targetAmount, interestRate, contribution });
         }
         // TODO: alert to download metamask
     }
