@@ -3,7 +3,7 @@ import { Flex, Heading, Image, Box, Text, Button } from 'rebass';
 import styled from 'styled-components';
 import USDC from '../img/usdc.svg';
 
-import { getWeb3, getAddress, formatTokenValueHuman } from '../ethereum/ethereum';
+import { getWeb3, getAddress, formatTokenValueHuman, formatTokenValueContract } from '../ethereum/ethereum';
 
 import Countdown from "react-countdown-now";
 
