@@ -12,7 +12,7 @@ class Fundraiser extends Component {
         this.state = {
             contractAddress: contractAddress,
             usdcAddress: '0x5E573d2374aebf5EC39F74B853f65c41d8B54141',
-            step: 1,
+            step: 1
         }
     }
 
