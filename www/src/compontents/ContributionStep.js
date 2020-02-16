@@ -132,7 +132,7 @@ class ContributionStep extends Component {
 
                     <Flex py={4}>
                         <Flex width={1/2} flexDirection='column'>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Name: {name}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}><span font-weight="500">Name: </span> {name}</Text>
                             <Text fontSize={[ 2, 3 ]} my={2}>Symbol: {symbol}</Text>
                             <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: ${targetAmount}</Text>
                             <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {interestRate}%</Text>
