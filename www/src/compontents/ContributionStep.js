@@ -12,6 +12,8 @@ import {
 
 import Countdown from "react-countdown-now";
 
+import { Line } from 'rc-progress';
+
 import {
     Label,
     Input,
@@ -49,33 +51,37 @@ class ContributionStep extends Component {
     }
 
     intializeContractData = async () => {
-        const { sponsorTokenAddress, usdcTokenAddress } = this.props;
         if(window.ethereum) {
-            const web3 = await getWeb3();
-            await setSponsorTokenContract(sponsorTokenAddress, web3);
-            await setUSDCTokenContract(usdcTokenAddress, web3);
-            const name = await getName();
-            const symbol = await getSymbol();
-
-            const addr = await getAddress();
-
-            // Need to format the amount from the smallest amount to dollar amount 
-            const decimalTargetAmount = await getTargetFundraiseAmount();
-            const decimals = 6;
-            const targetAmount = await formatTokenValueHuman(decimalTargetAmount, decimals);
-
-            const unformattedInterestRate = await getInterestRate();
-            const interestRate = (unformattedInterestRate/100);
-            const contribution = await getCurrentContribution(addr);
-            
-            // Timer Set Up
-            const endTime = await getEndTimeFundraiser();
-            const timeRemaining = +endTime;
-            console.log(timeRemaining)
-
-            this.setState({ name, symbol, targetAmount, interestRate, contribution, timeRemaining });
+            await this.updateContractState()
         }
         // TODO: alert to download metamask
+    }
+
+    updateContractState = async () => {
+        const { sponsorTokenAddress, usdcTokenAddress } = this.props;
+        const web3 = await getWeb3();
+        await setSponsorTokenContract(sponsorTokenAddress, web3);
+        await setUSDCTokenContract(usdcTokenAddress, web3);
+        const name = await getName();
+        const symbol = await getSymbol();
+
+        const addr = await getAddress();
+
+        // Need to format the amount from the smallest amount to dollar amount 
+        const decimalTargetAmount = await getTargetFundraiseAmount();
+        const decimals = 6;
+        const targetAmount = await formatTokenValueHuman(decimalTargetAmount, decimals);
+
+        const unformattedInterestRate = await getInterestRate();
+        const interestRate = (unformattedInterestRate/100);
+        const contribution = await getCurrentContribution(addr);
+        
+        // Timer Set Up
+        const endTime = await getEndTimeFundraiser();
+        const timeRemaining = +endTime;
+        console.log(timeRemaining)
+
+        this.setState({ name, symbol, targetAmount, interestRate, contribution, timeRemaining });
     }
 
     contributeUSDC = async () => {
@@ -155,6 +161,9 @@ class ContributionStep extends Component {
                             </Flex>
                         </Flex>
                     </Flex>
+
+                    <Heading my={2}>Fundraiser Progress</Heading>
+                    <Line percent="10" strokeWidth="2" strokeColor="#00CD90" />
                     
             </Flex>
 		);
