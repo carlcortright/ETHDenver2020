@@ -23,4 +23,4 @@ yarn-debug.log*
 yarn-error.log*
 
 contracts/build
-www/config.js
+www/src/config.js
