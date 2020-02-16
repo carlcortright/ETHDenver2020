@@ -28,8 +28,7 @@ import {
     getCurrentContribution,
     contribute,
     setUSDCTokenContract,
-    getEndTimeFundraiser,
-    getStartTimeFundraiser
+    getEndTimeFundraiser
  } from '../ethereum/token_methods';
 
 class ContributionStep extends Component {
@@ -78,7 +77,6 @@ class ContributionStep extends Component {
         // Timer Set Up
         const endTime = await getEndTimeFundraiser();
         const timeRemaining = +endTime;
-        console.log(timeRemaining)
 
         this.setState({ name, symbol, targetAmount, interestRate, contribution, timeRemaining });
     }
