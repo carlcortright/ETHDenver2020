@@ -5,6 +5,14 @@ import { config } from '../config'
 
 import Emoji from 'a11y-react-emoji'
 
+import { getWeb3 } from '../ethereum/ethereum';
+
+import { 
+    getLoanState, 
+    setSponsorTokenContract,  
+    setUSDCTokenContract
+} from '../ethereum/token_methods';
+
 class Fundraiser extends Component {
 
     constructor(props) {
@@ -13,14 +21,20 @@ class Fundraiser extends Component {
         this.state = {
             contractAddress: contractAddress,
             usdcAddress: config.usdcAddress,
-            constractState: 2,
+            constractState: 0,
         }
     }
 
     componentDidMount() {
         if(window.ethereum) {
-            setInterval(() => {
-                // TODO: Update the contract state
+            setInterval(async () => {
+                const { contractAddress, usdcAddress } = this.state;
+                const web3 = await getWeb3();
+                await setSponsorTokenContract(contractAddress, web3);
+                await setUSDCTokenContract(usdcAddress, web3);
+                const contractState = await getLoanState();
+                this.setState({ contractState });
+                console.log("Contract state " + this.state.contractState);
             }, 1000);
         }
     }
@@ -28,15 +42,17 @@ class Fundraiser extends Component {
     render() {
         // Determine which state to render
         let stateComponent;
-        console.log(this.state.constractState)
-        switch (this.state.constractState) {
-            case 1:
+        console.log("Render hit");
+        console.log("In render: " + this.state.contractState);
+        console.log("Type: " + typeof(this.state.contractState));
+        switch (this.state.contractState) {
+            case "0":
                 stateComponent = <ContributionStep 
                     sponsorTokenAddress={this.state.contractAddress}
                     usdcTokenAddress={this.state.usdcAddress}    
                 />
                 break;
-            case 2: 
+            case "1": 
                 stateComponent = <LoanOutstandingStep 
                     sponsorTokenAddress={this.state.contractAddress}
                     usdcTokenAddress={this.state.usdcAddress}    

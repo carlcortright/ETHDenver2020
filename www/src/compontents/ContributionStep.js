@@ -76,7 +76,7 @@ class ContributionStep extends Component {
         
         // Timer Set Up
         const endTime = await getEndTimeFundraiser();
-        const timeRemaining = +endTime;
+        const timeRemaining = (+endTime)*1000;
 
         this.setState({ name, symbol, targetAmount, interestRate, contribution, timeRemaining });
     }
@@ -102,7 +102,7 @@ class ContributionStep extends Component {
             contribution,
             timeRemaining
         } = this.state; 
-        console.log(timeRemaining)
+        // console.log(timeRemaining)
 		return (
 			<Flex
                   m={2, 3, 4, 5}
@@ -118,7 +118,7 @@ class ContributionStep extends Component {
                         <Box mx='auto' />
                         <Heading fontSize={2, 3}>
                             Time Remaining: 
-                            <Countdown date={timeRemaining} renderer={({ hours, minutes, seconds }) => <span> {hours}:{minutes}:{seconds}</span>}/>
+                            <Countdown date={timeRemaining} renderer={({ days, hours, minutes, seconds }) => <span> {days}:{hours}:{minutes}:{seconds}</span>}/>
                         </Heading>
                     </Flex>
 
