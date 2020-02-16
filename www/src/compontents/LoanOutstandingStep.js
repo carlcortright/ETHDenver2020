@@ -49,7 +49,7 @@ class LoanOutstandingStep extends Component {
             await setUSDCTokenContract(usdcTokenAddress, web3);
 
             const addr = await getAddress();
-            const contribution = await getCurrentContribution(addr)
+            const contribution = formatTokenValueHuman(await getCurrentContribution(addr))
             const rate = await getInterestRate();
             const startTime = await getStartTimeOpenLoan();
             const timeSinceStart = ((Date.now() / 1000 ) - startTime) / (365 * 86400);
@@ -71,7 +71,7 @@ class LoanOutstandingStep extends Component {
                   flexDirection={'column'}
                   width= {800}
                 >
-                    <Heading my={2} fontSize={7}>$<CountUp end={currentTokenValue + (currentTokenValue * rate)} start={currentTokenValue} duration={100000}/></Heading>
+                    <Heading my={2} fontSize={7}>$<CountUp end={currentTokenValue + (currentTokenValue * rate)} start={currentTokenValue} duration={1000000}/></Heading>
                     <Heading my={2}>Contribution Value</Heading>
             </Flex>
 		);
