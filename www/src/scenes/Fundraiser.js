@@ -11,7 +11,7 @@ class Fundraiser extends Component {
         const { contractAddress } = this.props.match.params;
         this.state = {
             contractAddress: contractAddress,
-            usdcAddress: '0x5E573d2374aebf5EC39F74B853f65c41d8B54141',
+            usdcAddress: '0x8029501589dCbEde12dCE78a3603F24B60Ae3DB6',
             step: 1
         }
     }
