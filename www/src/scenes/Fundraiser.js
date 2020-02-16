@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FormLayout, Stepbar, ContributionStep } from '../compontents'
+import { FormLayout, Stepbar, ContributionStep, LoanOutstandingStep } from '../compontents'
 import { Flex } from 'rebass';
 import { config } from '../config'
 
@@ -13,16 +13,29 @@ class Fundraiser extends Component {
         this.state = {
             contractAddress: contractAddress,
             usdcAddress: config.usdcAddress,
-            step: 1
+            constractState: 2,
+        }
+    }
+
+    componentDidMount() {
+        if(window.ethereum) {
+            setInterval(() => {
+                // TODO: Update the contract state
+            }, 1000);
         }
     }
   
     render() {
         // Determine which state to render
         let stateComponent;
-        switch (this.state.step) {
+        switch (this.state.constractState) {
             case 1:
                 stateComponent = <ContributionStep 
+                    sponsorTokenAddress={this.state.contractAddress}
+                    usdcTokenAddress={this.state.usdcAddress}    
+                />
+            case 2: 
+                stateComponent = <LoanOutstandingStep 
                     sponsorTokenAddress={this.state.contractAddress}
                     usdcTokenAddress={this.state.usdcAddress}    
                 />
