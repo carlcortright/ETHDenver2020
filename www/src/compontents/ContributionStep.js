@@ -51,9 +51,8 @@ class ContributionStep extends Component {
 
     intializeContractData = async () => {
         if(window.ethereum) {
-            await this.updateContractState()
+            setInterval(this.updateContractState, 1000);
         }
-        // TODO: alert to download metamask
     }
 
     updateContractState = async () => {
