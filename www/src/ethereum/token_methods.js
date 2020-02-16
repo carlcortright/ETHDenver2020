@@ -93,8 +93,9 @@ export const approveOnSponsorToken = async (amt, addr) => {
 }
 
 export const contribute = async (amt, addr) => {
-    return SponsorTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from: addr }).on('receipt', function(){
-        SponsorTokenContract.methods.contribute(amt).send({ from: addr });
+    console.log(addr);
+    return USDCTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from: addr }).on('receipt', function(){
+        USDCTokenContract.methods.contribute(amt).send({ from: addr });
     }); 
 }
 

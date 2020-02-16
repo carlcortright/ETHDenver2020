@@ -68,7 +68,8 @@ class ContributionStep extends Component {
 
     contributeUSDC = async () => {
         const amount = await formatTokenValueContract(this.state.contributionAmount, 6)
-        await contribute(amount);
+        const addr = await getAddress();
+        await contribute(amount, addr);
     }
 
     handleInputChange = event => {
