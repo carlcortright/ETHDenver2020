@@ -103,5 +103,7 @@ export const contribute = async (amt, addr) => {
 
 export const payLoan = async (amt, addr) => {
     const from = {from : addr}
-    return SponsorTokenContract.methods.payLoan(amt).send({ from });
+    return SponsorTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from }).on('receipt', function(){
+        SponsorTokenContract.methods.payLoan(amt).send({ from });
+    });
 }
