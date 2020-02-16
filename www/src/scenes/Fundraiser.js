@@ -28,18 +28,25 @@ class Fundraiser extends Component {
     render() {
         // Determine which state to render
         let stateComponent;
+        console.log(this.state.constractState)
         switch (this.state.constractState) {
             case 1:
                 stateComponent = <ContributionStep 
                     sponsorTokenAddress={this.state.contractAddress}
                     usdcTokenAddress={this.state.usdcAddress}    
                 />
+                break;
             case 2: 
                 stateComponent = <LoanOutstandingStep 
                     sponsorTokenAddress={this.state.contractAddress}
                     usdcTokenAddress={this.state.usdcAddress}    
                 />
+                break;
         }
+
+        console.log(stateComponent)
+
+
 
         return (
                 <FormLayout>
@@ -51,7 +58,7 @@ class Fundraiser extends Component {
                     flexDirection={'column'}
                     width= {800}
                     >
-                        <Stepbar numBars={3} highlightBar={this.state.step}/>
+                        <Stepbar numBars={3} highlightBar={this.state.constractState}/>
                     </Flex>
                     {stateComponent}
                 </FormLayout>

@@ -23,6 +23,8 @@ import {
     getStartTimeFundraiser
  } from '../ethereum/token_methods';
 
+import CountUp from 'react-countup';
+
 class LoanOutstandingStep extends Component {
 	constructor(props) {
 		super(props);
@@ -35,10 +37,12 @@ class LoanOutstandingStep extends Component {
                   m={2, 3, 4, 5}
                   color='black'
                   bg='white'
-                  alignItems='left'
+                  alignItems='center'
+                  justifyContent='center'
                   flexDirection={'column'}
                   width= {800}
                 >
+                    <CountUp end={100} start/>
                     <Heading my={2}>Interest Earned</Heading>
             </Flex>
 		);
