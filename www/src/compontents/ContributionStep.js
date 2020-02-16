@@ -72,7 +72,8 @@ class ContributionStep extends Component {
 
         const unformattedInterestRate = await getInterestRate();
         const interestRate = (unformattedInterestRate/100);
-        const contribution = await getCurrentContribution(addr);
+        const rawContribution = await getCurrentContribution(addr);
+        const contribution = formatTokenValueHuman(parseInt(rawContribution), 6)
         
         // Timer Set Up
         const endTime = await getEndTimeFundraiser();
