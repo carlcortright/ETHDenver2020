@@ -50,6 +50,10 @@ export const getStartTimeFundraiser = async () => {
     return SponsorTokenContract.methods.getStartTimeFundraiser().call();
 }
 
+export const getStartTimeOpenLoan = async () => {
+    return SponsorTokenContract.methods.getStartTimeOpenLoan().call();
+}
+
 export const getCurrentContribution = async (addr) => {
     return SponsorTokenContract.methods.getCurrentContribution(addr).call();
 }

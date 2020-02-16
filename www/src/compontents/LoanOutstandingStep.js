@@ -19,6 +19,7 @@ import {
     getCurrentContribution,
     contribute,
     setUSDCTokenContract,
+    getStartTimeOpenLoan,
     getEndTimeFundraiser,
     getStartTimeFundraiser
  } from '../ethereum/token_methods';
@@ -28,10 +29,38 @@ import CountUp from 'react-countup';
 class LoanOutstandingStep extends Component {
 	constructor(props) {
 		super(props);
-        this.state = {}
+        this.state = {
+            contribution: 0,
+            timeSinceStart: 0,
+            rate: 0,
+        }
+    }
+
+    componentDidMount() {
+        this.getContributionDetails()
+    }
+
+    getContributionDetails = async () => {
+        console.log(window.ethereum)
+        if (window.ethereum) {
+            const { sponsorTokenAddress, usdcTokenAddress } = this.props;
+            const web3 = await getWeb3();
+            await setSponsorTokenContract(sponsorTokenAddress, web3);
+            await setUSDCTokenContract(usdcTokenAddress, web3);
+
+            const addr = await getAddress();
+            const contribution = await getCurrentContribution(addr)
+            const rate = await getInterestRate();
+            const startTime = await getStartTimeOpenLoan();
+            const timeSinceStart = ((Date.now() / 1000 ) - startTime) / (365 * 86400);
+
+            this.setState({contribution, rate, timeSinceStart})
+        }
     }
 
 	render() {
+        const rate = this.state.rate / 10000;
+        const currentTokenValue = this.state.contribution * ( 1 + rate) ** this.state.timeSinceStart;
 		return (
 			<Flex
                   m={2, 3, 4, 5}
@@ -42,8 +71,8 @@ class LoanOutstandingStep extends Component {
                   flexDirection={'column'}
                   width= {800}
                 >
-                    <CountUp end={100} start/>
-                    <Heading my={2}>Interest Earned</Heading>
+                    <Heading my={2} fontSize={7}>$<CountUp end={currentTokenValue + (currentTokenValue * rate)} start={currentTokenValue} duration={100000}/></Heading>
+                    <Heading my={2}>Contribution Value</Heading>
             </Flex>
 		);
 	}

@@ -44,10 +44,6 @@ class Fundraiser extends Component {
                 break;
         }
 
-        console.log(stateComponent)
-
-
-
         return (
                 <FormLayout>
                     <Flex

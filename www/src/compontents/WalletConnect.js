@@ -20,8 +20,6 @@ class WalletConnect extends Component {
 			const userAddress = accounts[0];
 			this.setState({ userAddress, walletConnected: true });
 		}
-		// const web3 = await getWeb3();
-		// console.log(web3)
 	}
 
 	render() {
