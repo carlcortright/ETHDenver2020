@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { FormLayout, Stepbar, ContributionStep } from '../compontents'
 import { Flex, Heading, Box, Button } from 'rebass';
+import { config } from '../config'
 
 import Emoji from 'a11y-react-emoji'
 
@@ -11,12 +12,10 @@ class Fundraiser extends Component {
         const { contractAddress } = this.props.match.params;
         this.state = {
             contractAddress: contractAddress,
-            usdcAddress: '0x5E573d2374aebf5EC39F74B853f65c41d8B54141',
+            usdcAddress: config.usdcAddress,
             step: 1,
         }
     }
-
-    
   
     render() {
         // Determine which state to render
