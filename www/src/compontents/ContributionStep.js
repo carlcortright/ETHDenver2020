@@ -19,6 +19,7 @@ import {
     getInterestRate,
     setSponsorTokenContract,
     getCurrentContribution,
+    contribute,
     setUSDCTokenContract,
  } from '../ethereum/token_methods';
 
@@ -31,6 +32,7 @@ class ContributionStep extends Component {
             targetAmount: 'Loading...',
             interestRate: 'Loading...',
             contribution: 'Loading...',
+            contributionAmount: 0.0
         }
     }
 
@@ -61,6 +63,17 @@ class ContributionStep extends Component {
         }
         // TODO: alert to download metamask
     }
+
+    contributeUSDC = async () => {
+        const amount = await formatTokenValueContract(this.state.contributionAmount, 6)
+        await contribute(amount);
+    }
+
+    handleInputChange = event => {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+      }
 
 	render() {
         const {
@@ -105,20 +118,21 @@ class ContributionStep extends Component {
                                 justifyContent='center' 
                                 alignItems='center'>
                                     <Box p={10}>
-                                        <Label htmlFor='amount'>Contribution Amount ($)</Label>
+                                        <Label htmlFor='contributionAmount'>Contribution Amount ($)</Label>
                                         <Input
-                                        id='amount'
-                                        name='amount'
+                                        id='contributionAmount'
+                                        name='contributionAmount'
                                         placeholder='0'
                                         type="number" 
                                         min="0.01" 
                                         step="0.01" 
+                                        onChange={this.handleInputChange}
                                         />
                                     </Box>
 
                                     <Box p={10} >
-                                        <Button fontSize={3} >
-                                        Contribute
+                                        <Button fontSize={3} onClick={this.contributeUSDC}>
+                                            Contribute
                                         </Button>
                                     </Box>
                             </Flex>

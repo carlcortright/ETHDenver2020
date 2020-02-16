@@ -82,7 +82,7 @@ export const getTotalSponsorTokensExchanged = async () => {
 }
 
 // Could've merged this with the method below, don't hate me, clarity is nice
-export const approveOnUSDC = async (amt) => {
+export const approveOnUSDC = async (amt, callback) => {
     const from = { from: web3.eth.accounts[0] }
     return USDCTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from });
 }
