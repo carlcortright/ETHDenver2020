@@ -47,8 +47,8 @@ export const getStartTimeFundraiser = async () => {
     return SponsorTokenContract.methods.getStartTimeFundraiser().call();
 }
 
-export const getCurrentContribution = async () => {
-    return SponsorTokenContract.methods.getCurrentContribution(web3.eth.accounts[0]).call();
+export const getCurrentContribution = async (addr) => {
+    return SponsorTokenContract.methods.getCurrentContribution(addr).call();
 }
 
 export const getInterestRate = async () => {
@@ -73,8 +73,8 @@ export const getTotalLoanPayment = async () => {
     return SponsorTokenContract.methods.getTotalLoanPayment().call();
 }
 
-export const getSponsorTokenHeld = async () => {
-    return SponsorTokenContract.methods.balanceOf(web3.eth.accounts[0]).call();
+export const getSponsorTokenHeld = async (addr) => {
+    return SponsorTokenContract.methods.balanceOf(addr).call();
 }
 
 export const getTotalSponsorTokensExchanged = async () => {
@@ -82,23 +82,24 @@ export const getTotalSponsorTokensExchanged = async () => {
 }
 
 // Could've merged this with the method below, don't hate me, clarity is nice
-export const approveOnUSDC = async (amt, callback) => {
-    const from = { from: web3.eth.accounts[0] }
+// OLD
+export const approveOnUSDC = async (amt, addr) => {
     return USDCTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from });
 }
 
 // Approve on SponsorToken (for repaying loan)
-export const approveOnSponsorToken = async (amt) => {
-    const from = { from: web3.eth.accounts[0] }
-    return SponsorTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from });
+export const approveOnSponsorToken = async (amt, addr) => {
+    return SponsorTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from: addr });
 }
 
-export const contribute = async (amt) => {
-    const from = { from: web3.eth.accounts[0] }
-    return SponsorTokenContract.methods.contribute(amt).send({ from });
+export const contribute = async (amt, addr) => {
+    return SponsorTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from: addr }).on('receipt', function(){
+        SponsorTokenContract.methods.contribute(amt).send({ from: addr });
+    }); 
 }
 
-export const payLoan = async (amt) => {
-    const from = { from: web3.eth.accounts[0] }
-    return SponsorTokenContract.methods.payLoan(amt).send({ from });
+export const payLoan = async (amt, addr) => {
+    return SponsorTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from: addr }).on('receipt', function(){
+        SponsorTokenContract.methods.payLoan(amt).send({ from: addr });
+    });
 }
