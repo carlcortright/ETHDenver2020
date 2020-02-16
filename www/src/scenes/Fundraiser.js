@@ -42,25 +42,23 @@ class Fundraiser extends Component {
     render() {
         // Determine which state to render
         let stateComponent;
-        console.log(this.state.contractState)
+        console.log("Render hit");
+        console.log("In render: " + this.state.contractState);
+        console.log("Type: " + typeof(this.state.contractState));
         switch (this.state.contractState) {
-            case 0:
+            case "0":
                 stateComponent = <ContributionStep 
                     sponsorTokenAddress={this.state.contractAddress}
                     usdcTokenAddress={this.state.usdcAddress}    
                 />
                 break;
-            case 1: 
+            case "1": 
                 stateComponent = <LoanOutstandingStep 
                     sponsorTokenAddress={this.state.contractAddress}
                     usdcTokenAddress={this.state.usdcAddress}    
                 />
                 break;
         }
-
-        console.log(stateComponent)
-
-
 
         return (
                 <FormLayout>
