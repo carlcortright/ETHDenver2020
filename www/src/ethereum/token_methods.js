@@ -21,6 +21,9 @@ export const setUSDCTokenContract = async (address, web3) => {
 }
 
 // TODO: Get loan state
+expot const getLoanState = async () => {
+    return SponsorTokenContract.methods.getLoanState().call();
+}
 
 export const getName = async () => {
     return SponsorTokenContract.methods.name().call();
