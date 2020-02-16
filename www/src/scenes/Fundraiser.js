@@ -42,9 +42,6 @@ class Fundraiser extends Component {
     render() {
         // Determine which state to render
         let stateComponent;
-        console.log("Render hit");
-        console.log("In render: " + this.state.contractState);
-        console.log("Type: " + typeof(this.state.contractState));
         switch (this.state.contractState) {
             case "0":
                 stateComponent = <ContributionStep 

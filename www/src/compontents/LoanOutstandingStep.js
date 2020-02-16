@@ -49,18 +49,23 @@ class LoanOutstandingStep extends Component {
             await setUSDCTokenContract(usdcTokenAddress, web3);
 
             const addr = await getAddress();
+            console.log("Addr: " + addr);
             const contribution = await getCurrentContribution(addr)
+            console.log("Contribution: " + contribution);
             const rate = await getInterestRate();
+            console.log("Rate: " + rate);
             const startTime = await getStartTimeOpenLoan();
+            console.log("StartTime: " + startTime);
             const timeSinceStart = ((Date.now() / 1000 ) - startTime) / (365 * 86400);
 
-            this.setState({contribution, rate, timeSinceStart})
+            this.setState({contribution, rate, timeSinceStart});
         }
     }
 
 	render() {
         const rate = this.state.rate / 10000;
         const currentTokenValue = this.state.contribution * ( 1 + rate) ** this.state.timeSinceStart;
+
 		return (
 			<Flex
                   m={2, 3, 4, 5}
