@@ -52,12 +52,8 @@ class LoanOutstandingStep extends Component {
             const rawContribution = await getCurrentContribution(addr);
             const intContribution = parseInt(rawContribution)
             const contribution = await formatTokenValueHuman(intContribution, 6);
-            console.log(contribution)
-            console.log(typeof(contribution))
             const rate = await getInterestRate();
-            console.log("Rate: " + rate);
             const startTime = await getStartTimeOpenLoan();
-            console.log("StartTime: " + startTime);
             const timeSinceStart = ((Date.now() / 1000 ) - startTime) / (365 * 86400);
 
             this.setState({contribution, rate, timeSinceStart});
@@ -66,8 +62,7 @@ class LoanOutstandingStep extends Component {
 
 	render() {
         const rate = this.state.rate / 10000;
-        const currentTokenValue = 1.0 * this.state.contribution * ( 1 + rate) ** this.state.timeSinceStart;
-        console.log("Curr val: " + currentTokenValue)
+        const currentTokenValue = this.state.contribution * ( 1 + rate) ** this.state.timeSinceStart;
 
 		return (
 			<Flex
