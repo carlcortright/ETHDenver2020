@@ -13,7 +13,7 @@ class Fundraiser extends Component {
         this.state = {
             contractAddress: contractAddress,
             usdcAddress: config.usdcAddress,
-            constractState: 2,
+            constractState: 1,
         }
     }
 

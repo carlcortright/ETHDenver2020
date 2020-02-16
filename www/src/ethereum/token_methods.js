@@ -11,7 +11,6 @@ let USDCTokenContract;
 // Initialize Contracts
 export const setSponsorTokenContract = async (address, web3) => {
     const abi = SponsorToken.abi
-    console.log(web3)
     SponsorTokenContract = new web3.eth.Contract(abi, address);
 }
 
