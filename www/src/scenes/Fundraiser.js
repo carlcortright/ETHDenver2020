@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormLayout, Stepbar, ContributionStep } from '../compontents'
-import { Flex, Heading, Box, Button } from 'rebass';
+import { Flex } from 'rebass';
 import { config } from '../config'
 
 import Emoji from 'a11y-react-emoji'
