@@ -137,6 +137,7 @@ class ContributionStep extends Component {
                             <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: ${targetAmount}</Text>
                             <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {interestRate}%</Text>
                             <Text fontSize={[ 2, 3 ]} my={2}>My Contribution: ${contribution}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Total Raised: ${totalContributed}</Text>
                         </Flex>
                         <Flex width={1/2}>
                             <Flex
