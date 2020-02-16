@@ -21,7 +21,7 @@ class Fundraiser extends Component {
         this.state = {
             contractAddress: contractAddress,
             usdcAddress: config.usdcAddress,
-            constractState: 0,
+            contractState: 0,
         }
     }
 
@@ -70,7 +70,7 @@ class Fundraiser extends Component {
                     flexDirection={'column'}
                     width= {800}
                     >
-                        <Stepbar numBars={3} highlightBar={this.state.const}/>
+                        <Stepbar numBars={3} highlightBar={this.state.contractState}/>
                     </Flex>
                     {stateComponent}
                 </FormLayout>
