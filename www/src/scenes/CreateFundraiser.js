@@ -53,7 +53,8 @@ class CreateFundraiser extends Component {
 
   handleDate = event => {
     const days = event.target.value;
-    const endTime = Date.now() + (days * 86400);
+    const endTime = Math.floor((Date.now()/1000) + (days * 86400));
+    console.log(endTime);
     this.setState({
       endTime
     })
