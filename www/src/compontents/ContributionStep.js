@@ -3,7 +3,7 @@ import { Flex, Heading, Image, Box, Text, Button } from 'rebass';
 import styled from 'styled-components';
 import USDC from '../img/usdc.svg';
 
-import { getWeb3, formatTokenValueHuman } from '../ethereum/ethereum';
+import { getWeb3, getAddress, formatTokenValueHuman } from '../ethereum/ethereum';
 
 import Countdown from "react-countdown-now";
 
@@ -49,6 +49,8 @@ class ContributionStep extends Component {
             const name = await getName();
             const symbol = await getSymbol();
 
+            const addr = await getAddress();
+
             // Need to format the amount from the smallest amount to dollar amount 
             const decimalTargetAmount = await getTargetFundraiseAmount();
             const decimals = 6;
@@ -56,7 +58,7 @@ class ContributionStep extends Component {
 
             const unformattedInterestRate = await getInterestRate();
             const interestRate = (unformattedInterestRate/100);
-            const contribution = await getCurrentContribution();
+            const contribution = await getCurrentContribution(addr);
             this.setState({ name, symbol, targetAmount, interestRate, contribution });
         }
         // TODO: alert to download metamask
