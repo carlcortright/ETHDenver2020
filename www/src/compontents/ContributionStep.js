@@ -28,7 +28,8 @@ import {
     getCurrentContribution,
     contribute,
     setUSDCTokenContract,
-    getEndTimeFundraiser
+    getEndTimeFundraiser,
+    getCurrentAmountRaised
  } from '../ethereum/token_methods';
 
 class ContributionStep extends Component {
@@ -41,7 +42,9 @@ class ContributionStep extends Component {
             interestRate: 'Loading...',
             contribution: 'Loading...',
             contributionAmount: 0.0,
-            timeRemaining: 0
+            timeRemaining: 0,
+            targetAmount: 0,
+            totalContributed: 0,
         }
     }
 
@@ -72,13 +75,17 @@ class ContributionStep extends Component {
 
         const unformattedInterestRate = await getInterestRate();
         const interestRate = (unformattedInterestRate/100);
-        const contribution = await getCurrentContribution(addr);
-        
+        const rawContribution = await getCurrentContribution(addr);
+        const contribution = await formatTokenValueHuman(parseInt(rawContribution), 6)
+
+        const totalContributedRaw = parseInt(await getCurrentAmountRaised());
+        const totalContributed = await formatTokenValueHuman(totalContributedRaw, 6);
+
         // Timer Set Up
         const endTime = await getEndTimeFundraiser();
         const timeRemaining = (+endTime)*1000;
 
-        this.setState({ name, symbol, targetAmount, interestRate, contribution, timeRemaining });
+        this.setState({ name, symbol, targetAmount, interestRate, contribution, timeRemaining, totalContributed });
     }
 
     contributeUSDC = async () => {
@@ -100,9 +107,10 @@ class ContributionStep extends Component {
             targetAmount,
             interestRate,
             contribution,
-            timeRemaining
+            timeRemaining,
+            totalContributed
         } = this.state; 
-        // console.log(timeRemaining)
+        const percentComplete = (totalContributed / targetAmount) * 100
 		return (
 			<Flex
                   m={2, 3, 4, 5}
@@ -126,9 +134,9 @@ class ContributionStep extends Component {
                         <Flex width={1/2} flexDirection='column'>
                             <Text fontSize={[ 2, 3 ]} my={2}>Name: {name}</Text>
                             <Text fontSize={[ 2, 3 ]} my={2}>Symbol: {symbol}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: {targetAmount}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {interestRate}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>My Contribution: {contribution}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: ${targetAmount}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {interestRate}%</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>My Contribution: ${contribution}</Text>
                         </Flex>
                         <Flex width={1/2}>
                             <Flex
@@ -159,8 +167,8 @@ class ContributionStep extends Component {
                         </Flex>
                     </Flex>
 
-                    <Heading my={2}>Fundraiser Progress</Heading>
-                    <Line percent="10" strokeWidth="2" strokeColor="#00CD90" />
+                    <Heading my={2}>Fundraiser Progress: {percentComplete}%</Heading>
+                    <Line percent={percentComplete} strokeWidth="2" strokeColor="#00CD90" />
                     
             </Flex>
 		);
