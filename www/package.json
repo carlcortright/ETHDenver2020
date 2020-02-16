@@ -12,6 +12,7 @@
     "a11y-react-emoji": "^1.1.2",
     "bignumber.js": "^9.0.0",
     "emotion-theming": "^10.0.27",
+    "rc-progress": "^2.5.2",
     "react": "^16.12.0",
     "react-countdown-now": "^2.1.2",
     "react-dom": "^16.12.0",
