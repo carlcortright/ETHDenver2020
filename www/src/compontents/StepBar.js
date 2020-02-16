@@ -5,20 +5,16 @@ import styled from 'styled-components';
 class StepBar extends Component {
 	constructor(props) {
 		super(props);
-        const { numBars, highlightBar } = this.props;
-        this.numBars = numBars;
-        this.highlightBar = highlightBar;
 	}
 
 	render() {
         let bars = []
-        for (let i = 0; i < this.numBars; i++) {
-            if (i === this.highlightBar) {
+        for (let i = 0; i < this.props.numBars; i++) {
+            if (i === this.props.highlightBar) {
                 bars.push(<SingleBar highlight={true} key={i}/>)
             }
             bars.push(<SingleBar key={i}/>)
         }
-        console.log(bars)
 		return (
 			<Flex 
                 justifyContent='center'

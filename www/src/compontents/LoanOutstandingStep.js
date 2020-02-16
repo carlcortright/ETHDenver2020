@@ -49,9 +49,11 @@ class LoanOutstandingStep extends Component {
             await setUSDCTokenContract(usdcTokenAddress, web3);
 
             const addr = await getAddress();
-            console.log("Addr: " + addr);
-            const contribution = await getCurrentContribution(addr)
-            console.log("Contribution: " + contribution);
+            const rawContribution = await getCurrentContribution(addr);
+            const intContribution = parseInt(rawContribution)
+            const contribution = await formatTokenValueHuman(intContribution, 6);
+            console.log(contribution)
+            console.log(typeof(contribution))
             const rate = await getInterestRate();
             console.log("Rate: " + rate);
             const startTime = await getStartTimeOpenLoan();
@@ -64,7 +66,8 @@ class LoanOutstandingStep extends Component {
 
 	render() {
         const rate = this.state.rate / 10000;
-        const currentTokenValue = this.state.contribution * ( 1 + rate) ** this.state.timeSinceStart;
+        const currentTokenValue = 1.0 * this.state.contribution * ( 1 + rate) ** this.state.timeSinceStart;
+        console.log("Curr val: " + currentTokenValue)
 
 		return (
 			<Flex
@@ -76,7 +79,7 @@ class LoanOutstandingStep extends Component {
                   flexDirection={'column'}
                   width= {800}
                 >
-                    <Heading my={2} fontSize={7}>$<CountUp end={currentTokenValue + (currentTokenValue * rate)} start={currentTokenValue} duration={100000}/></Heading>
+                    <Heading my={2} fontSize={7}>$<CountUp end={currentTokenValue + (currentTokenValue * rate)} start={currentTokenValue} duration={1000000} decimals={6}/></Heading>
                     <Heading my={2}>Contribution Value</Heading>
             </Flex>
 		);
