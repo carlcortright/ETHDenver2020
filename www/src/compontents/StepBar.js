@@ -13,7 +13,7 @@ class StepBar extends Component {
 	render() {
         let bars = []
         for (let i = 0; i < this.numBars; i++) {
-            if (i === this.highlightBar - 1) {
+            if (i === this.highlightBar) {
                 bars.push(<SingleBar highlight={true} key={i}/>)
             }
             bars.push(<SingleBar key={i}/>)
