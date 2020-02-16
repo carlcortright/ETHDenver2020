@@ -12,8 +12,9 @@ class StepBar extends Component {
         for (let i = 0; i < this.props.numBars; i++) {
             if (i === this.props.highlightBar) {
                 bars.push(<SingleBar highlight={true} key={i}/>)
+            } else {
+                bars.push(<SingleBar key={i}/>)
             }
-            bars.push(<SingleBar key={i}/>)
         }
 		return (
 			<Flex 

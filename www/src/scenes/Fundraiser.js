@@ -70,7 +70,7 @@ class Fundraiser extends Component {
                     flexDirection={'column'}
                     width= {800}
                     >
-                        <Stepbar numBars={3} highlightBar={this.state.contractState}/>
+                        <Stepbar numBars={4} highlightBar={parseInt(this.state.contractState)}/>
                     </Flex>
                     {stateComponent}
                 </FormLayout>

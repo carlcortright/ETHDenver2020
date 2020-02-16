@@ -73,7 +73,7 @@ class ContributionStep extends Component {
         const unformattedInterestRate = await getInterestRate();
         const interestRate = (unformattedInterestRate/100);
         const rawContribution = await getCurrentContribution(addr);
-        const contribution = formatTokenValueHuman(parseInt(rawContribution), 6)
+        const contribution = await formatTokenValueHuman(parseInt(rawContribution), 6)
         
         // Timer Set Up
         const endTime = await getEndTimeFundraiser();
@@ -127,9 +127,9 @@ class ContributionStep extends Component {
                         <Flex width={1/2} flexDirection='column'>
                             <Text fontSize={[ 2, 3 ]} my={2}>Name: {name}</Text>
                             <Text fontSize={[ 2, 3 ]} my={2}>Symbol: {symbol}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: {targetAmount}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {interestRate}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>My Contribution: {contribution}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: ${targetAmount}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {interestRate}%</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>My Contribution: ${contribution}</Text>
                         </Flex>
                         <Flex width={1/2}>
                             <Flex
