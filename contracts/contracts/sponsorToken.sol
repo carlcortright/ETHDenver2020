@@ -136,7 +136,8 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     // Function for a lender to contribute USDC to fundraiser
     function contribute(uint256 amount) public returns (bool) {
         require (currentState == States.Fundraising);
-        require (amount + contractBalanceUSDC <= fundraiseAmount);
+        require ((amount + contractBalanceUSDC) <= fundraiseAmount);
+        require (amount > 0);
 
         if (isFundraiseOver()) {
         	// Fundraise failed, returned USDC to original lenders
@@ -147,8 +148,11 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
 
         // TransferFrom USDC amount into contract address
         contractUSDC.transferFrom(msg.sender, address(this), amount);
-
-        lenders.push(msg.sender);
+        
+        // TODO: Only push if sender isnt in list already
+        if (contributedUSDC[msg.sender] == 0){
+        	lenders.push(msg.sender);
+        }
         // Default value for mapping value uint is 0, so no need to check if value exists or not
         contributedUSDC[msg.sender] += amount;
         contractBalanceUSDC += amount;
@@ -183,7 +187,7 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
         // Mint tokens to each lender equivalent to amount of USDC they put in
       	uint i;
     	for(i = 0; i < lenders.length; i++){
-    		mint(lenders[i], contributedUSDC[lenders[i]]);
+    		_mint(lenders[i], contributedUSDC[lenders[i]]);
     	}
     	// TODO: Turn off minting here
 
