@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormLayout, Stepbar, ContributionStep } from '../compontents'
-import { Flex, Heading, Box, Button } from 'rebass';
+import { Flex } from 'rebass';
 import { config } from '../config'
 
 import Emoji from 'a11y-react-emoji'
@@ -13,7 +13,7 @@ class Fundraiser extends Component {
         this.state = {
             contractAddress: contractAddress,
             usdcAddress: config.usdcAddress,
-            step: 1,
+            step: 1
         }
     }
   
