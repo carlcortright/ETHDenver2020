@@ -3,7 +3,12 @@ import { Flex, Heading, Image, Box, Text, Button } from 'rebass';
 import styled from 'styled-components';
 import USDC from '../img/usdc.svg';
 
-import { getWeb3, getAddress, formatTokenValueHuman, formatTokenValueContract } from '../ethereum/ethereum';
+import { 
+    getWeb3, 
+    getAddress, 
+    formatTokenValueHuman, 
+    formatTokenValueContract 
+} from '../ethereum/ethereum';
 
 import Countdown from "react-countdown-now";
 
@@ -21,6 +26,8 @@ import {
     getCurrentContribution,
     contribute,
     setUSDCTokenContract,
+    getEndTimeFundraiser,
+    getStartTimeFundraiser
  } from '../ethereum/token_methods';
 
 class ContributionStep extends Component {
@@ -32,7 +39,8 @@ class ContributionStep extends Component {
             targetAmount: 'Loading...',
             interestRate: 'Loading...',
             contribution: 'Loading...',
-            contributionAmount: 0.0
+            contributionAmount: 0.0,
+            timeRemaining: 0
         }
     }
 
@@ -42,8 +50,6 @@ class ContributionStep extends Component {
 
     intializeContractData = async () => {
         const { sponsorTokenAddress, usdcTokenAddress } = this.props;
-        console.log(sponsorTokenAddress)
-        console.log(window.ethereum)
         if(window.ethereum) {
             const web3 = await getWeb3();
             await setSponsorTokenContract(sponsorTokenAddress, web3);
@@ -61,7 +67,13 @@ class ContributionStep extends Component {
             const unformattedInterestRate = await getInterestRate();
             const interestRate = (unformattedInterestRate/100);
             const contribution = await getCurrentContribution(addr);
-            this.setState({ name, symbol, targetAmount, interestRate, contribution });
+            
+            // Timer Set Up
+            const endTime = await getEndTimeFundraiser();
+            const timeRemaining = +endTime;
+            console.log(timeRemaining)
+
+            this.setState({ name, symbol, targetAmount, interestRate, contribution, timeRemaining });
         }
         // TODO: alert to download metamask
     }
@@ -84,8 +96,10 @@ class ContributionStep extends Component {
             symbol,
             targetAmount,
             interestRate,
-            contribution
+            contribution,
+            timeRemaining
         } = this.state; 
+        console.log(timeRemaining)
 		return (
 			<Flex
                   m={2, 3, 4, 5}
@@ -101,7 +115,7 @@ class ContributionStep extends Component {
                         <Box mx='auto' />
                         <Heading fontSize={2, 3}>
                             Time Remaining: 
-                            <Countdown date={Date.now() + 1000000} renderer={({ hours, minutes, seconds }) => <span> {hours}:{minutes}:{seconds}</span>}/>
+                            <Countdown date={timeRemaining} renderer={({ hours, minutes, seconds }) => <span> {hours}:{minutes}:{seconds}</span>}/>
                         </Heading>
                     </Flex>
 
