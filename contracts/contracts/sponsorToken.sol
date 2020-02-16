@@ -95,6 +95,10 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     	return fundraiseStartTime;
     }
 
+    function getStartTimeOpenLoan() public view returns (uint256) {
+        return openLoanStartTime;
+    }
+
     function getTotalLoanPayment() public view returns (uint256) {
     	return totalLoanPayment;
     }
