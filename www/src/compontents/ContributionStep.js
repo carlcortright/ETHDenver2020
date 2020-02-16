@@ -3,7 +3,7 @@ import { Flex, Heading, Image, Box, Text, Button } from 'rebass';
 import styled from 'styled-components';
 import USDC from '../img/usdc.svg';
 
-import { getWeb3 } from '../ethereum/ethereum';
+import { getWeb3, formatTokenValueHuman } from '../ethereum/ethereum';
 
 import Countdown from "react-countdown-now";
 
@@ -46,8 +46,14 @@ class ContributionStep extends Component {
             await setUSDCTokenContract(usdcTokenAddress, web3);
             const name = await getName();
             const symbol = await getSymbol();
-            const targetAmount = await getTargetFundraiseAmount();
-            const interestRate = await getInterestRate();
+
+            // Need to format the amount from the smallest amount to dollar amount 
+            const decimalTargetAmount = await getTargetFundraiseAmount();
+            const decimals = 6;
+            const targetAmount = await formatTokenValueHuman(decimalTargetAmount, decimals);
+
+            const unformattedInterestRate = await getInterestRate();
+            const interestRate = (unformattedInterestRate/100);
             this.setState({ name, symbol, targetAmount, interestRate });
         }
         // TODO: alert to download metamask
@@ -83,8 +89,8 @@ class ContributionStep extends Component {
                         <Flex width={1/2} flexDirection='column'>
                             <Text fontSize={[ 2, 3 ]} my={2}>Name: {name}</Text>
                             <Text fontSize={[ 2, 3 ]} my={2}>Symbol: {symbol}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: {targetAmount}</Text>
-                            <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {interestRate}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: ${targetAmount}</Text>
+                            <Text fontSize={[ 2, 3 ]} my={2}>Interest Rate: {interestRate}%</Text>
                         </Flex>
                         <Flex width={1/2}>
                             <Flex
