@@ -133,6 +133,17 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     ///  Token Moving Methods   ///
     ///*************************///
 
+    // Override transfer to keep track of who holds a stake in the loan
+    function transfer(address transferRecipient, uint256 amount) public returns (bool) {
+        require(amount != 0, "Transfer amount must be greater than 0");
+        if (balanceOf(transferRecipient) == 0) {
+            lenders.push(transferRecipient);
+        }
+        // FIXME: The list will include people who have a sponsor token balance of zero
+        _transfer(_msgSender(), transferRecipient, amount);
+        return true;
+    }
+
     // Function for a lender to contribute USDC to fundraiser
     function contribute(uint256 amount) public returns (bool) {
         require (currentState == States.Fundraising);
@@ -210,8 +221,19 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
 			// Set total amount of USDC paid back
 			totalLoanPayment = contractBalanceUSDC;
 
+            // Pay back the loan to sponsors
+            distributeRepayment();
+
 			currentState = States.ConvertLoan;
 		}
+    }
+
+    function distributeRepayment() private {
+        uint256 sponsorTokenValue = sponsorTokenToUSDC();
+        for (uint i = 0; i < lenders.length; i++) {
+            uint256 reward = balanceOf(lenders[i]) * sponsorTokenValue;
+            contractUSDC.transfer(lenders[i], reward);
+        }
     }
 
     function convertSponsorToken(uint256 amount) private {
