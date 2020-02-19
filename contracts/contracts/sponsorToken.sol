@@ -156,7 +156,7 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
         // Default value for mapping value uint is 0, so no need to check if value exists or not
         contributedUSDC[msg.sender] += amount;
         contractBalanceUSDC += amount;
-
+        
         if (enoughFundsRaised()) {
         	// Set total amount of USDC funds raised
         	startLoanBalanceUSDC = contractBalanceUSDC;
