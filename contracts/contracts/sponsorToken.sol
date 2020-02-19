@@ -221,8 +221,19 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
 			// Set total amount of USDC paid back
 			totalLoanPayment = contractBalanceUSDC;
 
+            // Pay back the loan to sponsors
+            distributeRepayment();
+
 			currentState = States.ConvertLoan;
 		}
+    }
+
+    function distributeRepayment() private {
+        uint256 sponsorTokenValue = sponsorTokenToUSDC();
+        for (uint i = 0; i < lenders.length; i++) {
+            uint256 reward = balanceOf(lenders[i]) * sponsorTokenValue;
+            contractUSDC.transfer(lenders[i], reward);
+        }
     }
 
     function convertSponsorToken(uint256 amount) private {
