@@ -19,7 +19,7 @@ class StepBar extends Component {
 		return (
 			<Flex 
                 justifyContent='center'
-                width={'100%'}>
+                width={4/5}>
                     { bars }
             </Flex>
 		);

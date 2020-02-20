@@ -113,25 +113,25 @@ class ContributionStep extends Component {
         const percentComplete = (totalContributed / targetAmount) * 100
 		return (
 			<Flex
-                  m={2, 3, 4, 5}
+                  m={1, 3, 4}
                   color='black'
                   bg='white'
                   alignItems='left'
                   flexDirection={'column'}
-                  width= {800}
+                  p={[1, 2, 4]}
                 >
-                    <Flex alignItems='center'>
+                    <Flex justifyContent={['center', 'left']} alignItems={'center'} flexWrap={'wrap'} >
                         <Image mr={1} src={USDC} height='32px'/>
-                        <Heading fontSize={4, 5}>Contribute to Fundraiser</Heading>
-                        <Box mx='auto' />
-                        <Heading fontSize={2, 3}>
+                        <Heading fontSize={[3, 5]} >Contribute to Fundraiser</Heading>
+                        <Box mx={[0, 'auto']} />
+                        <Heading fontSize={[1, 3]} ml={[10, 50]} my={10}>
                             Time Remaining: 
                             <Countdown date={timeRemaining} renderer={({ days, hours, minutes, seconds }) => <span> {days}:{hours}:{minutes}:{seconds}</span>}/>
                         </Heading>
                     </Flex>
 
-                    <Flex py={4}>
-                        <Flex width={1/2} flexDirection='column'>
+                    <Flex py={0, 4}  flexWrap={'wrap'} >
+                        <Flex width={[1, 1/2]} my={[20, 0]} flexDirection='column' alignItems={['center', 'flex-start']}>
                             <Text fontSize={[ 2, 3 ]} my={2}><span font-weight="500">Name: </span> {name}</Text>
                             <Text fontSize={[ 2, 3 ]} my={2}>Symbol: {symbol}</Text>
                             <Text fontSize={[ 2, 3 ]} my={2}>Target Amount: ${targetAmount}</Text>
@@ -139,15 +139,16 @@ class ContributionStep extends Component {
                             <Text fontSize={[ 2, 3 ]} my={2}>My Contribution: ${contribution}</Text>
                             <Text fontSize={[ 2, 3 ]} my={2}>Total Raised: ${totalContributed}</Text>
                         </Flex>
-                        <Flex width={1/2}>
+                        <Flex width={[1, 1/2]} py={0, 4}>
                             <Flex
                                 as='form'
                                 onSubmit={e => e.preventDefault()}
                                 width={1}
                                 justifyContent='center' 
-                                alignItems='center'>
-                                    <Box p={10}>
-                                        <Label htmlFor='contributionAmount'>Contribution Amount ($)</Label>
+                                alignItems='center'
+                                flexWrap={['wrap', 'nowrap']}>
+                                    <Box p={10} minWidth={200}>
+                                        <Label htmlFor='contributionAmount' >Contribution Amount ($)</Label>
                                         <Input
                                         id='contributionAmount'
                                         name='contributionAmount'

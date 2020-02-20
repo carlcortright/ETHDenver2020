@@ -60,14 +60,15 @@ class Fundraiser extends Component {
         return (
                 <FormLayout>
                     <Flex
-                    m={2, 3, 4, 5}
+                    my={2, 3, 4, 5}
                     color='black'
                     bg='white'
                     alignItems='center'
                     flexDirection={'column'}
-                    width= {800}
+                    maxWidth={800}
+                    width={1}
                     >
-                        <Stepbar numBars={4} highlightBar={parseInt(this.state.contractState)}/>
+                        <Stepbar numBars={3} highlightBar={parseInt(this.state.contractState)}/>
                     </Flex>
                     {stateComponent}
                 </FormLayout>

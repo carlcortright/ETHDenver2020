@@ -18,7 +18,7 @@ class Nav extends Component {
 					height='36px'
 				/>
 				<Bar />
-				<Text p={4} pl={0} fontSize={[ 4 ]}>
+				<Text p={4} pl={0} fontSize={[ 2, 4 ]}>
 				Peer Lending
 				</Text>
 				<Box mx='auto' />

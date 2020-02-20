@@ -66,16 +66,16 @@ class LoanOutstandingStep extends Component {
 
 		return (
 			<Flex
-                  m={2, 3, 4, 5}
+                  m={[2, 3]}
                   color='black'
                   bg='white'
                   alignItems='center'
                   justifyContent='center'
                   flexDirection={'column'}
-                  width= {800}
+                  width={[1, '800px']}
                 >
-                    <Heading my={2} fontSize={7}>$<CountUp end={currentTokenValue + (currentTokenValue * rate)} start={currentTokenValue} duration={1000000} decimals={6}/></Heading>
-                    <Heading my={2}>Contribution Value</Heading>
+                    <Heading my={2} fontSize={[5, 6]}>$<CountUp end={currentTokenValue + (currentTokenValue * rate)} start={currentTokenValue} duration={1000000} decimals={6}/></Heading>
+                    <Heading my={2} fontSize={[3, 4]}>Contribution Value</Heading>
             </Flex>
 		);
 	}

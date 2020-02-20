@@ -103,7 +103,7 @@ class CreateFundraiser extends Component {
       return (
             <FormLayout>
                 <Flex
-                  m={2, 3, 4, 5}
+                  m={[3, 4, 5]}
                   color='black'
                   bg='white'
                   alignItems='center'

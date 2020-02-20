@@ -1,3 +1,3 @@
 export const config = {
-    usdcAddress: '0x8029501589dCbEde12dCE78a3603F24B60Ae3DB6'
+    usdcAddress: '0xaeDcD9a10d40A6300885734cc9CbA664Ee709124'
 }
