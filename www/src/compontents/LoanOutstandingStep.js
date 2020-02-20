@@ -61,7 +61,7 @@ class LoanOutstandingStep extends Component {
     }
 
 	render() {
-        const rate = this.state.rate / 10000;
+        const rate = this.state.rate / 50000;
         const currentTokenValue = this.state.contribution * ( 1 + rate) ** this.state.timeSinceStart;
 
 		return (
