@@ -32,7 +32,7 @@ import {
     getCurrentAmountRaised
  } from '../ethereum/token_methods';
 
-class ContributionStep extends Component {
+class PayLoanStep extends Component {
 	constructor(props) {
 		super(props);
         this.state = {
@@ -73,17 +73,7 @@ class ContributionStep extends Component {
         const decimals = 6;
         const targetAmount = await formatTokenValueHuman(decimalTargetAmount, decimals);
 
-        const unformattedInterestRate = await getInterestRate();
-        const interestRate = (unformattedInterestRate/100);
-        const rawContribution = await getCurrentContribution(addr);
-        const contribution = await formatTokenValueHuman(parseInt(rawContribution), 6)
-
-        const totalContributedRaw = parseInt(await getCurrentAmountRaised());
-        const totalContributed = await formatTokenValueHuman(totalContributedRaw, 6);
-
-        // Timer Set Up
-        const endTime = await getEndTimeFundraiser();
-        const timeRemaining = (+endTime)*1000;
+        const amountRepaid = await getAmountRepaid();
 
         this.setState({ name, symbol, targetAmount, interestRate, contribution, timeRemaining, totalContributed });
     }
@@ -95,7 +85,7 @@ class ContributionStep extends Component {
     }
 
     makeLoanPayment = async () => {
-        const amount = await formatTokenValueContract(this.state.contributionAmount, 6)
+        const amount = await formatTokenValueContract(this.state.paymentAmount, 6)
         const addr = await getAddress();
         await payLoan(amount, addr);
     }
@@ -126,15 +116,6 @@ class ContributionStep extends Component {
                   flexDirection={'column'}
                   width= {800}
                 >
-                    <Flex alignItems='center'>
-                        <Image mr={1} src={USDC} height='32px'/>
-                        <Heading fontSize={4, 5}>Contribute to Fundraiser</Heading>
-                        <Box mx='auto' />
-                        <Heading fontSize={2, 3}>
-                            Time Remaining: 
-                            <Countdown date={timeRemaining} renderer={({ days, hours, minutes, seconds }) => <span> {days}:{hours}:{minutes}:{seconds}</span>}/>
-                        </Heading>
-                    </Flex>
 
                     <Flex py={4}>
                         <Flex width={1/2} flexDirection='column'>
@@ -153,10 +134,10 @@ class ContributionStep extends Component {
                                 justifyContent='center' 
                                 alignItems='center'>
                                     <Box p={10}>
-                                        <Label htmlFor='contributionAmount'>Contribution Amount ($)</Label>
+                                        <Label htmlFor='paymentAmount'>Payment Amount ($)</Label>
                                         <Input
-                                        id='contributionAmount'
-                                        name='contributionAmount'
+                                        id='paymentAmount'
+                                        name='paymentAmount'
                                         placeholder='0'
                                         type="number" 
                                         min="0.01" 
@@ -166,8 +147,8 @@ class ContributionStep extends Component {
                                     </Box>
 
                                     <Box p={10} >
-                                        <Button fontSize={3} onClick={this.contributeUSDC}>
-                                            Contribute
+                                        <Button fontSize={3} onClick={this.makeLoanPayment}>
+                                            Make Payment
                                         </Button>
                                     </Box>
                             </Flex>
