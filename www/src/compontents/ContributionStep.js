@@ -94,12 +94,6 @@ class ContributionStep extends Component {
         await contribute(amount, addr);
     }
 
-    makeLoanPayment = async () => {
-        const amount = await formatTokenValueContract(this.state.contributionAmount, 6)
-        const addr = await getAddress();
-        await payLoan(amount, addr);
-    }
-
     handleInputChange = event => {
         this.setState({
             [event.target.name]: event.target.value
