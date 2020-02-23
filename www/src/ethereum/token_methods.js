@@ -104,17 +104,15 @@ export const approveOnSponsorToken = async (amt, addr) => {
     return SponsorTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from: addr });
 }
 
-export const contribute = async (amt, addr) => {
-    return USDCTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from: addr }).on('receipt', function(){
-        SponsorTokenContract.methods.contribute(amt).send({ from: addr });
+export const contribute = async (amt, addr, callback) => {
+    USDCTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from: addr }).on('receipt', function(){
+        SponsorTokenContract.methods.contribute(amt).send({ from: addr }).on('receipt', () => {
+            callback();
+        });
     }); 
 }
 
 export const payLoan = async (amt, addr) => {
-    console.log(amt)
-    console.log(addr)
-    console.log(USDCTokenContract)
-    console.log(SponsorTokenContract)
     return USDCTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from: addr }).on('receipt', function(){
         SponsorTokenContract.methods.payLoan(amt).send({ from: addr });
     });

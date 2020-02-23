@@ -32,6 +32,8 @@ import {
     getCurrentAmountRaised
  } from '../ethereum/token_methods';
 
+import Loader from 'react-loader-spinner'
+
 class ContributionStep extends Component {
 	constructor(props) {
 		super(props);
@@ -45,6 +47,7 @@ class ContributionStep extends Component {
             timeRemaining: 0,
             targetAmount: 0,
             totalContributed: 0,
+            loading: false,
         }
     }
 
@@ -91,7 +94,8 @@ class ContributionStep extends Component {
     contributeUSDC = async () => {
         const amount = await formatTokenValueContract(this.state.contributionAmount, 6)
         const addr = await getAddress();
-        await contribute(amount, addr);
+        this.setState({ loading: true });
+        contribute(amount, addr, () => {this.setState({ loading: false })});
     }
 
     handleInputChange = event => {
@@ -156,13 +160,26 @@ class ContributionStep extends Component {
                                         type="number" 
                                         min="0.01" 
                                         step="0.01" 
+                                        width={"100%"}
                                         onChange={this.handleInputChange}
                                         />
                                     </Box>
 
                                     <Box p={10} >
-                                        <Button fontSize={3} onClick={this.contributeUSDC}>
-                                            Contribute
+                                        <Button fontSize={3} onClick={this.contributeUSDC} minWidth={150}>
+                                            {
+                                                this.state.loading 
+                                                ?
+                                                <Loader
+                                                    type="TailSpin"
+                                                    color="white"
+                                                    height={25}
+                                                    width={25}
+                                                />
+                                                : 
+                                                "Contribute"
+                                            }
+
                                         </Button>
                                     </Box>
                             </Flex>

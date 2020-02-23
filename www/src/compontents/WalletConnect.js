@@ -9,6 +9,17 @@ class WalletConnect extends Component {
 			walletConnected: false,
 			userAddress: ''
 		}
+		this.checkIfConnected()
+	}
+
+	componentDidMount() {
+		setInterval(this.checkIfConnected, 1000);
+	}
+
+	checkIfConnected = () => {
+		if (window.ethereum) {
+			this.setState({ walletConnected: true })
+		}
 	}
 
 	connnectWallet = async () => {
@@ -28,10 +39,10 @@ class WalletConnect extends Component {
 			<div>
 				{!walletConnected
 				?
-				<Button variant='primary' fontWeight={500} mr={[1, 4]} onClick={this.connnectWallet}>Connect Wallet</Button>
+				<Button variant='primary' fontWeight={500} mr={[1, 4]} fontSize={[1, 2]} onClick={this.connnectWallet}>Connect Wallet</Button>
 				:
-                <Link mr={4} href={"https://etherscan.io/address/" + userAddress}>
-                    <Button variant='primary' fontWeight={500} mr={[1, 4]}>{userAddress.substr(0, 6)}...{userAddress.substr(37, 42)} Connected</Button>
+                <Link mr={[1, 4]} href={"https://etherscan.io/address/" + userAddress}>
+                    <Button variant='primary' fontWeight={500} mr={[1, 4]} fontSize={[1, 2]}>Wallet Connected</Button>
                 </Link>
 				}
 			</div>
