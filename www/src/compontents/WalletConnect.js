@@ -28,10 +28,10 @@ class WalletConnect extends Component {
 			<div>
 				{!walletConnected
 				?
-				<Button variant='primary' fontWeight={500} mr={4} onClick={this.connnectWallet}>Connect Wallet</Button>
+				<Button variant='primary' fontWeight={500} mr={[1, 4]} onClick={this.connnectWallet}>Connect Wallet</Button>
 				:
                 <Link mr={4} href={"https://etherscan.io/address/" + userAddress}>
-                    <Button variant='primary' fontWeight={500} mr={4}>{userAddress.substr(0, 6)}...{userAddress.substr(37, 42)} Connected</Button>
+                    <Button variant='primary' fontWeight={500} mr={[1, 4]}>{userAddress.substr(0, 6)}...{userAddress.substr(37, 42)} Connected</Button>
                 </Link>
 				}
 			</div>

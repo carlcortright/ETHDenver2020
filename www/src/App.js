@@ -12,7 +12,7 @@ import {
 import { Styled } from 'theme-ui'
 
 import { Nav } from './compontents';
-import { CreateFundraiser, Fundraiser } from './scenes'
+import { CreateFundraiser, Fundraiser, Repay } from './scenes'
 import theme from './theme'
 
 function App() {
@@ -25,6 +25,8 @@ function App() {
             <Switch>
               <Route path="/create-fundraiser" component={CreateFundraiser} />
               <Route path="/fundraiser/:contractAddress" component={Fundraiser} />
+              <Route path="/repay/:contractAddress" component={Repay} />
+              
             </Switch>
         </Router>
       </Styled.root>

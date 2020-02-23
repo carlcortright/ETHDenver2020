@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
-import { FormLayout, Stepbar, ContributionStep, LoanOutstandingStep } from '../compontents'
+import { 
+    FormLayout, 
+    Stepbar, 
+    ContributionStep, 
+    LoanOutstandingStep, 
+    CompleteStep 
+} from '../compontents'
 import { Flex } from 'rebass';
-import { config } from '../config'
 
 import Emoji from 'a11y-react-emoji'
 
 import { getWeb3 } from '../ethereum/ethereum';
+import { getUSDCAddress } from '../ethereum/addresses';
 
 import { 
     getLoanState, 
@@ -17,23 +23,24 @@ class Fundraiser extends Component {
 
     constructor(props) {
         super(props);
-        const { contractAddress } = this.props.match.params;
+        
         this.state = {
-            contractAddress: contractAddress,
-            usdcAddress: config.usdcAddress,
             contractState: 0,
+            usdcAddress: '',
+            contractAddress: '',
         }
     }
 
     componentDidMount() {
         if(window.ethereum) {
             setInterval(async () => {
-                const { contractAddress, usdcAddress } = this.state;
                 const web3 = await getWeb3();
+                const usdcAddress = await getUSDCAddress(web3);
+                const { contractAddress } = this.props.match.params;
                 await setSponsorTokenContract(contractAddress, web3);
                 await setUSDCTokenContract(usdcAddress, web3);
                 const contractState = await getLoanState();
-                this.setState({ contractState });
+                this.setState({ contractState, contractAddress, usdcAddress });
                 console.log("Contract state " + this.state.contractState);
             }, 1000);
         }
@@ -54,6 +61,9 @@ class Fundraiser extends Component {
                     sponsorTokenAddress={this.state.contractAddress}
                     usdcTokenAddress={this.state.usdcAddress}    
                 />
+                break;
+            case "2": 
+                stateComponent = <CompleteStep />
                 break;
         }
 

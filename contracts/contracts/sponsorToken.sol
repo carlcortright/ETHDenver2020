@@ -110,6 +110,10 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     function getLoanState() public view returns (States){
     	return currentState;
     }
+
+    function getRemainingRepayment() public view returns (uint256) {
+    	return calcLoanInterest() - getTotalLoanPayment();
+    }
     ///************************///
     ///    State Transitions   ///
     ///************************///
@@ -122,7 +126,7 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     }
     
     function isLoanRepaid() private view returns (bool) {
-        return (contractBalanceUSDC >= calcLoanRepayment());
+        return (contractBalanceUSDC >= calcLoanInterest());
     }
 
     function allSponsorTokensReturned() private view returns (bool) {
@@ -158,7 +162,7 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
         }
 
         // TransferFrom USDC amount into contract address
-        contractUSDC.transferFrom(msg.sender, address(this), amount);
+        contractUSDC.transferFrom(_msgSender(), address(this), amount);
         
         // TODO: Only push if sender isnt in list already
         if (contributedUSDC[msg.sender] == 0){
@@ -209,23 +213,21 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
     	openLoanStartTime = now;
     }
 
-    function payLoan(uint256 amount) private {
+    function payLoan(uint256 amount) public returns (bool) {
     	require (currentState == States.OpenLoan);
-    	// Only allow recipient to payback loan
-    	require (msg.sender == recipient);
 
-		contractUSDC.transferFrom(address(this), msg.sender, amount);
-		contractBalanceUSDC += 0;
+		contractUSDC.transferFrom(_msgSender(), address(this), amount);
+		contractBalanceUSDC += amount;
+        // Set total amount of USDC paid back
+        totalLoanPayment = contractBalanceUSDC;
 
 		if (isLoanRepaid()) {
-			// Set total amount of USDC paid back
-			totalLoanPayment = contractBalanceUSDC;
-
             // Pay back the loan to sponsors
             distributeRepayment();
-
 			currentState = States.ConvertLoan;
 		}
+
+        return true;
     }
 
     function distributeRepayment() private {
@@ -234,24 +236,6 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
             uint256 reward = balanceOf(lenders[i]) * sponsorTokenValue;
             contractUSDC.transfer(lenders[i], reward);
         }
-    }
-
-    function convertSponsorToken(uint256 amount) private {
-    	require (currentState == States.ConvertLoan);
-    	require (contractBalanceUSDC >= amount);
-
-    	// Pull sponsor tokens from sender
-        transferFrom(msg.sender, address(this), amount);
-
-        // Calculate equivalent amount of USDC and send to original sender
-        uint256 toSendUSDC = amount * sponsorTokenToUSDC();
-        contractUSDC.transfer(msg.sender, toSendUSDC);
-
-        contractBalanceUSDC -= toSendUSDC;
-
-        if (allSponsorTokensReturned()) {
-			currentState = States.ClosedLoan;
-		}
     }
 
     function sponsorTokenToUSDC() public view returns (uint256) {
@@ -272,9 +256,4 @@ contract SponsorToken is ERC20, ERC20Mintable, ERC20Detailed{
         // Number of years calculated as timeElapsed in seconds / 1 years worth of seconds (31622400)
         return fundraiseAmount * (1 + (interestRate / 10000)) ** (timeElapsedSeconds / 31622400);
     }
-
-    function calcLoanRepayment() private view returns (uint256) {
-    	return startLoanBalanceUSDC + calcLoanInterest();
-    }
-
 }

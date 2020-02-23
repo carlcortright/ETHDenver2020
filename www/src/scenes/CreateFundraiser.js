@@ -14,6 +14,9 @@ import {
   Input
 } from '@rebass/forms'
 
+import { getUSDCAddress } from '../ethereum/addresses';
+import { getWeb3 } from '../ethereum/ethereum';
+
 class CreateFundraiser extends Component {
   constructor() {
     super();
@@ -25,7 +28,6 @@ class CreateFundraiser extends Component {
       fundraiseAmount: '0',
       interestRate: '0',
       endTime: '0',
-      addressUSDC: '',
       recipient: ''
     }
   }
@@ -68,11 +70,13 @@ class CreateFundraiser extends Component {
       fundraiseAmount,
       interestRate,
       endTime,
-      addressUSDC,
       recipient
     } = this.state;
 
     try{
+      const web3 = await getWeb3();
+      const usdcAddress = await getUSDCAddress(web3);
+      console.log(usdcAddress);
       const sponsorContractAddress = await deployContract(
         name,
         symbol,
@@ -80,7 +84,7 @@ class CreateFundraiser extends Component {
         fundraiseAmount,
         interestRate,
         endTime,
-        addressUSDC,
+        usdcAddress,
         recipient
     );
 
@@ -187,17 +191,6 @@ class CreateFundraiser extends Component {
                           placeholder='0x0000....'
                           onChange={this.handleInputChange}
                           value={recipient}
-                        />
-                      </Box>
-
-                      <Box p={10}>
-                        <Label htmlFor='addressUSDC'>USDC Token Address</Label>
-                        <Input
-                          id='addressUSDC'
-                          name='addressUSDC'
-                          placeholder='0x0000....'
-                          onChange={this.handleInputChange}
-                          value={addressUSDC}
                         />
                       </Box>
 

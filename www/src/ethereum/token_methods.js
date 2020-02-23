@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { web3 } from './ethereum.js'
+import { web3, formatTokenValueHuman } from './ethereum.js'
 
 import SponsorToken from '../abis/SponsorToken.json';
 import ERC20 from '../abis/ERC20.json';
@@ -72,6 +72,12 @@ export const getSponsorTokenValue = async () => {
     return SponsorTokenContract.methods.sponsorTokenToUSDC().call();
 }
 
+export const getRemainingRepayment = async () => {
+    const rawContribution = await SponsorTokenContract.methods.getRemainingRepayment().call();
+    const intContribution = parseInt(rawContribution);
+    return formatTokenValueHuman(intContribution, 6);
+}
+
 // Loan exchange methods:
 // Get current SponsorToken to USDC value => getSponsorTokenValue()
 
@@ -99,14 +105,17 @@ export const approveOnSponsorToken = async (amt, addr) => {
 }
 
 export const contribute = async (amt, addr) => {
-    console.log(addr);
     return USDCTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from: addr }).on('receipt', function(){
         SponsorTokenContract.methods.contribute(amt).send({ from: addr });
     }); 
 }
 
 export const payLoan = async (amt, addr) => {
-    return SponsorTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from: addr }).on('receipt', function(){
+    console.log(amt)
+    console.log(addr)
+    console.log(USDCTokenContract)
+    console.log(SponsorTokenContract)
+    return USDCTokenContract.methods.approve(SponsorTokenContract.options.address, amt).send({ from: addr }).on('receipt', function(){
         SponsorTokenContract.methods.payLoan(amt).send({ from: addr });
     });
 }
