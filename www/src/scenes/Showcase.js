@@ -21,7 +21,7 @@ class Showcase extends Component {
                 <FundraiserShowcase 
                     title="Test Fundraiser"
                     description="This is a test fundraiser. Funds do not go to a legitimate recipeint."
-                    address="0x1059054f5df692F282E23DC6Cc9973995b09843f"
+                    address="0x7674CDe839a2B0Ab3805Eff5f8426f258c58c891"
                 />
                 <Heading fontSize={[2, 3]} m={3}>- OR -</Heading>
                 <Link href="/create-fundraiser"><Button variant='primary' fontWeight={500}>Create Fundraiser</Button></Link>
